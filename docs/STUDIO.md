@@ -27,6 +27,7 @@ Flask, one file. Every route except the login uses `@auth`. With `STUDIO_PASSWOR
 | GET | `/` | editor (`static/index.html`, no-cache); redirects to `/login` when signed out |
 | GET | `/static/<path>` | static files; `help/*` and `index.html` are sent no-cache |
 | GET | `/fonts/<name>` | TTF for the editor (built-in and user fonts) |
+| GET | `/api/icons` | Lucide icons `[[name, code point], …]` (the same as `/static/lucide.json`, but reachable with HTTP Basic: for scripts and the MCP server) |
 | GET | `/api/meta` | fonts, icon set, constants for the editor |
 | POST / DELETE | `/api/fonts`, `/api/fonts/<name>` | upload or delete a user font (TTF/OTF → `fonts/f_<id>.ttf` + `.title`) |
 | GET / POST / DELETE | `/api/assets`, `/assets/<name>` | list, serve, upload or delete images |

@@ -227,6 +227,13 @@ def meta():
     return jsonify(fonts=fonts, firmware=str(FIRMWARE_DIR), firmware_ok=(FIRMWARE_DIR / "main" / "layout.cpp").exists())
 
 
+@app.get("/api/icons")
+@auth
+def icon_list():
+    """Lucide icons [[name, code point], ...] (for scripts and the MCP server; the editor reads /static/lucide.json)"""
+    return send_from_directory(APP_DIR / "static", "lucide.json", max_age=3600)
+
+
 # ------------------------------------------------------------------- fonts ---
 
 @app.post("/api/fonts")

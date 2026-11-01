@@ -97,6 +97,7 @@ app/static/index.html    the editor (HTML + CSS + JS in one file)
 app/static/help/         illustrated help: help.{pl,en}.html, web.{pl,en}.html, screenshots (webp)
 app/static/lucide.json   icon list for the icon picker
 firmware/                Tab5 ESP-IDF project (main/*.cpp, main/web/index.html = device web page, main/version.h = build ID)
+mcp/tab5studio_mcp.py    optional MCP server (stdio, stdlib only): Claude designs screens through Studio's API (docs/MCP.md)
 scripts/                 sync-firmware.sh, help_shots.js (Studio help screenshots), web_shots.js (device web page screenshots, no Tab5 needed)
 data/                    (git-ignored) projects, library, assets, fonts, builds, work dir, settings.json,
                          tab5_last.json, tab5_saved.json, tab5_backups/ (see docs/ARCHITECTURE.md → Data folder)

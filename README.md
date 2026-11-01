@@ -33,6 +33,7 @@ Jak to działa:
 | `app/` | Tab5 Studio: serwer (Python, Flask) i edytor (`app/static/index.html`) |
 | `firmware/` | kod programu Tab5 (ESP-IDF 5.4, LVGL 9), bez haseł |
 | `docs/` | dokumentacja techniczna: architektura, Studio, firmware, API |
+| `mcp/` | opcjonalny serwer MCP: projektowanie ekranów rozmową z Claude ([docs/MCP.md](docs/MCP.md)) |
 | `scripts/` | `sync-firmware.sh` (kopiuje kod Tab5 bez haseł), `help_shots.js` i `web_shots.js` (zrzuty do Pomocy) |
 | `CLAUDE.md` | skrót dla Claude Code: zasady projektu i pułapki firmware |
 | `Dockerfile`, `docker-compose.yml`, `.env.example` | uruchomienie na serwerze |
@@ -110,11 +111,22 @@ FIRMWARE_DIR=$PWD/firmware IDF_EXPORT=~/esp/esp-idf-v5.4.2/export.sh .venv/bin/p
 
 Bez `.env` skopiuj `firmware/main/*_secrets.h.example` na `*_secrets.h` i uzupełnij je.
 
+## Projektowanie z Claude (MCP, opcjonalnie)
+
+Opcjonalny serwer MCP (`mcp/tab5studio_mcp.py`, sam Python bez dodatkowych bibliotek) pozwala projektować ekrany rozmową z Claude w Claude Code albo Claude Desktop. Opisujesz ekran, a Claude układa go jako projekt w Studio, wysyła na Tab5 jako podgląd, ogląda zrzut ekranu Tab5 i poprawia. Na Tab5 trafia tylko zwykły podgląd, więc firmware się nie zmienia. Serwer łączy się wyłącznie ze Studio, a zapisuje na Tab5 dopiero na Twoje polecenie. Korzystasz z własnego konta Claude.
+
+```bash
+claude mcp add tab5studio -e STUDIO_URL=http://127.0.0.1:8080 -e STUDIO_PASSWORD='<hasło Studio>' \
+  -- python3 "$PWD/mcp/tab5studio_mcp.py"
+```
+
+Konfiguracja dla Claude Desktop i lista narzędzi: [docs/MCP.md](docs/MCP.md).
+
 ## Instrukcja i dokumentacja
 
 - **Instrukcja dla użytkownika** (PL / EN, ze zrzutami) jest w Studio pod przyciskiem **„Pomoc”** albo klawiszem `?`. Ma dwie zakładki: **Tab5 Studio** i **Web Interface** (strona www Tab5).
 - **Uruchomienie na serwerze z pomocą Claude Code:** [docs/SERVER-SETUP.md](docs/SERVER-SETUP.md).
-- **Dokumentacja techniczna** jest w folderze [`docs/`](docs/): [architektura](docs/ARCHITECTURE.md), [Studio](docs/STUDIO.md), [firmware](docs/FIRMWARE.md), [API Tab5](docs/API.md).
+- **Dokumentacja techniczna** jest w folderze [`docs/`](docs/): [architektura](docs/ARCHITECTURE.md), [Studio](docs/STUDIO.md), [firmware](docs/FIRMWARE.md), [API Tab5](docs/API.md), [MCP](docs/MCP.md).
 
 ## Autor
 

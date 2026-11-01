@@ -33,6 +33,7 @@ How it works:
 | `app/` | Tab5 Studio: server (Python, Flask) and editor (`app/static/index.html`) |
 | `firmware/` | Tab5 firmware source (ESP-IDF 5.4, LVGL 9), without secrets |
 | `docs/` | technical documentation: architecture, Studio, firmware, API |
+| `mcp/` | optional MCP server: design screens by talking to Claude ([docs/MCP.md](docs/MCP.md)) |
 | `scripts/` | `sync-firmware.sh` (copies the Tab5 source without secrets), `help_shots.js` and `web_shots.js` (help screenshots) |
 | `CLAUDE.md` | notes for Claude Code: project rules and firmware pitfalls |
 | `Dockerfile`, `docker-compose.yml`, `.env.example` | running it on a server |
@@ -110,11 +111,22 @@ FIRMWARE_DIR=$PWD/firmware IDF_EXPORT=~/esp/esp-idf-v5.4.2/export.sh .venv/bin/p
 
 Without `.env`, copy `firmware/main/*_secrets.h.example` to `*_secrets.h` and fill them in.
 
+## Designing with Claude (MCP, optional)
+
+An optional MCP server (`mcp/tab5studio_mcp.py`, plain Python, no extra packages) lets you design screens by talking to Claude in Claude Code or Claude Desktop. You describe a screen; Claude builds it as a Studio project, sends it to the Tab5 as a live preview, looks at a screenshot of the Tab5 and fixes it. The Tab5 only gets an ordinary preview, so the firmware stays as it is. The server talks only to Studio and saves on the Tab5 only when you ask. It uses your own Claude account.
+
+```bash
+claude mcp add tab5studio -e STUDIO_URL=http://127.0.0.1:8080 -e STUDIO_PASSWORD='<Studio password>' \
+  -- python3 "$PWD/mcp/tab5studio_mcp.py"
+```
+
+Claude Desktop setup and the list of tools: [docs/MCP.md](docs/MCP.md).
+
 ## Guide and documentation
 
 - **The user guide** (PL / EN, with screenshots) is in Studio under the **“Help”** button or the `?` key. It has two tabs: **Tab5 Studio** and **Web Interface** (the Tab5 web page).
 - **Server setup with Claude Code** (in Polish): [docs/SERVER-SETUP.md](docs/SERVER-SETUP.md).
-- **Technical documentation** is in [`docs/`](docs/): [architecture](docs/ARCHITECTURE.md), [Studio](docs/STUDIO.md), [firmware](docs/FIRMWARE.md), [Tab5 API](docs/API.md).
+- **Technical documentation** is in [`docs/`](docs/): [architecture](docs/ARCHITECTURE.md), [Studio](docs/STUDIO.md), [firmware](docs/FIRMWARE.md), [Tab5 API](docs/API.md), [MCP](docs/MCP.md).
 
 ## Author
 

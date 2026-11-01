@@ -161,6 +161,16 @@
 <p class="tip">Kopię programu, który jest teraz na Tab5, pobierzesz na jego stronie www w zakładce System → „Kopia programu” — dzięki temu zawsze możesz wrócić do poprzedniej wersji.</p>
 </section>
 
+<section id="h-mcp">
+<h2>Projektowanie z Claude (MCP, opcjonalnie)</h2>
+<p>Ekrany możesz też projektować rozmową z Claude w Claude Code albo Claude Desktop. Służy do tego opcjonalny serwer MCP z repozytorium (<code>mcp/tab5studio_mcp.py</code>, sam Python bez dodatkowych bibliotek).</p>
+<ul><li><b>Jak to działa:</b> opisujesz ekran, np. „duży zegar Rajdhani, pogoda teraz po prawej, prognoza na dole, bursztynowy”. Claude zakłada nowy projekt w Studio, układa elementy, sprawdza układ (wyjście poza ekran, nachodzenie, róg minutnika i przycisk menu), wysyła projekt na Tab5 jako podgląd i ogląda zrzut ekranu Tab5.</li>
+<li><b>Bez zmian na Tab5:</b> Tab5 dostaje zwykły podgląd jak z przycisku „Na Tab5”, więc nie trzeba nowego programu. Na stałe Claude zapisuje tylko na Twoje polecenie.</li>
+<li><b>Podłączenie:</b> serwer łączy się tylko ze Studio, hasłem Studio. Konfigurację (polecenie <code>claude mcp add …</code> albo plik Claude Desktop) znajdziesz w <code>docs/MCP.md</code>. Podgląd i zrzuty wymagają adresu i PIN-u Tab5 w „Połączenie z Tab5”.</li>
+<li>Projekt otwarty w edytorze nie odświeża się sam: zmiany Claude'a zobaczysz po ponownym otwarciu projektu. Zapisanie starej wersji w edytorze nadpisałoby te zmiany.</li>
+<li>Korzystasz z własnego konta Claude.</li></ul>
+</section>
+
 <section id="h-keys">
 <h2>Skróty klawiszowe</h2>
 <table class="tbl keys">

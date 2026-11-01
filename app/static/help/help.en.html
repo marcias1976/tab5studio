@@ -161,6 +161,16 @@
 <p class="tip">You can download a copy of the program now on the Tab5 from its web page, System tab → “Program backup” — so you can always go back to the previous version.</p>
 </section>
 
+<section id="h-mcp">
+<h2>Designing with Claude (MCP, optional)</h2>
+<p>You can also design screens by talking to Claude in Claude Code or Claude Desktop. This uses the optional MCP server from the repository (<code>mcp/tab5studio_mcp.py</code>, plain Python, no extra packages).</p>
+<ul><li><b>How it works:</b> describe a screen, e.g. "a big Rajdhani clock, the weather now on the right, the forecast below, amber". Claude creates a new project in Studio, places the elements, checks the layout (off screen, overlaps, the timer corner and the menu button), sends the project to the Tab5 as a live preview and looks at a screenshot of the Tab5.</li>
+<li><b>No change on the Tab5:</b> the Tab5 gets an ordinary live preview, as from the "On Tab5" button, so no new program is needed. Claude saves on the Tab5 for good only when you ask.</li>
+<li><b>Connecting:</b> the server talks only to Studio, with Studio's password. The setup (the <code>claude mcp add …</code> command or the Claude Desktop file) is in <code>docs/MCP.md</code>. The preview and screenshots need the Tab5 address and PIN in "Tab5 connection".</li>
+<li>A project open in the editor does not reload by itself: open it again to see Claude's changes. Saving the old version in the editor would overwrite them.</li>
+<li>It uses your own Claude account.</li></ul>
+</section>
+
 <section id="h-keys">
 <h2>Keyboard shortcuts</h2>
 <table class="tbl keys">
