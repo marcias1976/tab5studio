@@ -27,7 +27,7 @@ claude mcp add tab5studio -e STUDIO_URL=http://127.0.0.1:8080 -e STUDIO_PASSWORD
     "tab5studio": {
       "command": "python3",
       "args": ["/path/to/tab5studio/mcp/tab5studio_mcp.py"],
-      "env": { "STUDIO_URL": "http://192.168.1.10:8080", "STUDIO_PASSWORD": "<Studio password>" }
+      "env": { "STUDIO_URL": "http://<Studio address>:8080", "STUDIO_PASSWORD": "<Studio password>" }
     }
   }
 }
