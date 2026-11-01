@@ -43,7 +43,7 @@ Then ask Claude, for example: *"Using tab5studio, design a Wariant-1 with a larg
 |---|---|
 | `get_reference` | the scene format: screen, faces, element types and fields, tap actions, layout rules, this Studio's fonts and images (Claude reads it first) |
 | `list_projects`, `get_project` | Studio projects, a project's scene (or one face) as JSON |
-| `create_project` | a new project: empty clock faces or a copy of a project; refuses an existing name unless `overwrite` |
+| `create_project` | a new project: empty clock faces or a copy of a project; the name is cleaned as Studio stores it (letters, digits, spaces, `-`, `_`), and an existing name is refused unless `overwrite` |
 | `set_face` | replace all elements of a face (+ background, palette, `enabled` / `builtin` / `ms`) |
 | `update_elements` | change elements by id, remove, add |
 | `check_layout` | estimated boxes: off screen, overlaps, under the timer pill (top left) or the menu button (top right), missing `stop` / `timer_close` |
@@ -53,10 +53,21 @@ Then ask Claude, for example: *"Using tab5studio, design a Wariant-1 with a larg
 | `stop_preview` | end the live preview |
 | `save_to_tab5` | save on the Tab5 for good and set its palette (`/api/live` with `save`); only when the user asks |
 
-`set_face` and `update_elements` write the project file at once (`PUT /api/projects/<name>`) and return the layout check. Designed elements on intro / alarm / timer switch `builtin` off, elements on Wariant-3 switch `enabled` on. `save_to_tab5` sends Studio's `sceneHash`, so Studio shows the saved project as up to date.
+`set_face` and `update_elements` write the project file at once (`PUT /api/projects/<name>`) and return the layout check. Numbers are stored whole (as Studio stores them), so `opacity: 80.0` becomes `80`. `update_elements` on a face an older project lacks asks for `set_face` first. Designed elements on intro / alarm / timer switch `builtin` off, elements on Wariant-3 switch `enabled` on. `save_to_tab5` sends Studio's `sceneHash`, so Studio shows the saved project as up to date.
 
 A project open in the Studio editor does not reload by itself: open it again to see Claude's changes (saving the old copy in the editor would overwrite them). Claude is told to design in its own new project, not in yours, unless you ask.
 
 ## Protocol
 
-JSON-RPC 2.0 over stdio, one message per line: `initialize`, `ping`, `tools/list`, `tools/call`. Errors from Studio or from checking the elements come back as a tool result with `isError: true`, in plain words, so Claude can fix the call.
+JSON-RPC 2.0 over stdio, one message per line: `initialize`, `ping`, `tools/list`, `tools/call`. Errors from Studio or from checking the elements come back as a tool result with `isError: true`, in plain words, so Claude can fix the call (a wrong `STUDIO_PASSWORD` says so). A line that is not a JSON-RPC object gets `Invalid Request`; the server keeps running.
+
+## Checking it works
+
+Without Studio (the protocol and the tool list):
+
+```bash
+printf '%s\n' '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{}}' '{"jsonrpc":"2.0","id":2,"method":"tools/list"}' \
+  | python3 mcp/tab5studio_mcp.py
+```
+
+With Studio, ask Claude in a fresh session: *"Using tab5studio, list my projects"*. Then try a test project with `preview_on_tab5` + `tab5_screenshot` and `stop_preview`, and delete the test project in Studio (Open project → Delete) when done.

@@ -15,6 +15,7 @@
 | Studio server | `app/server.py` | Stores projects, library, assets and fonts in `data/`. Turns a scene into C (`compile_scene`, `gen_scene`), runs builds, talks to the Tab5 (live preview, saved design, OTA updates, settings backups). See [STUDIO.md](STUDIO.md). |
 | Firmware | `firmware/` | Clock UI (LVGL), settings screens, web page + JSON API, Wi-Fi, weather, alarms, timer, live scene receiver and saved design, OTA updates. See [FIRMWARE.md](FIRMWARE.md). |
 | Device web page | `firmware/main/web/index.html` | Embedded in the firmware and served at `/`. PIN login, then five tabs: Pulpit (preview, theme, mode, screen on/off, intro, brightness Min/Max, weather and facts), Wygląd (colors, presets, themes), Budzik, Harmonogram (Plan on a phone), System (place, language, restart, technical state, program backup, SD files). |
+| MCP server (optional) | `mcp/tab5studio_mcp.py` | Started by an MCP client (Claude Code, Claude Desktop) over stdio; lets Claude design screens through Studio's own API (projects, live preview, Tab5 screenshot, save on the Tab5). Python stdlib only, nothing on the Tab5. See [MCP.md](MCP.md). |
 
 ## The scene (project) format
 
