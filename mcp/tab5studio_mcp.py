@@ -16,6 +16,7 @@ import base64
 import json
 import os
 import random
+import re
 import string
 import sys
 import urllib.error
@@ -166,6 +167,11 @@ def put_project(name, scene):
     studio(f"/api/projects/{quote(name)}", {"name": name, "scene": scene}, method="PUT")
 
 
+def safe_name(name):
+    """The name Studio stores the project under (the same rule as safe_name() in app/server.py)"""
+    return re.sub(r"[^\w \-ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]", "", str(name or "").strip())[:40].strip()
+
+
 def project_names():
     return [p["name"] for p in studio("/api/projects").get("projects", [])]
 
@@ -195,8 +201,8 @@ def norm_element(el, face):
             raise StudioError(f"{t}: {k} (number) is required")
     out = {"id": str(el.get("id") or nid()), "name": el.get("name") or t}
     out.update({k: v for k, v in el.items() if k not in ("id", "name")})
-    for k, v in out.items():  # whole pixels, as Studio stores them
-        if isinstance(v, float) and k not in ("opacity",):
+    for k, v in out.items():  # whole numbers, as Studio stores them (and as its sceneHash sees them)
+        if isinstance(v, float):
             out[k] = round(v)
     out.setdefault("visible", True)
     out.setdefault("locked", False)
@@ -383,9 +389,10 @@ def t_get(a):
 
 
 def t_create(a):
-    name = str(a["name"]).strip()
-    if not name or len(name) > 40:
-        raise StudioError("name: 1-40 characters")
+    asked = str(a["name"]).strip()
+    name = safe_name(asked)
+    if not name or len(asked) > 40:
+        raise StudioError("name: 1-40 characters (letters, digits, spaces, - and _)")
     if name in project_names() and not a.get("overwrite"):
         raise StudioError(f"Project {name!r} exists; pick another name or pass overwrite true (only if the user agreed)")
     base = a.get("copy_from")
@@ -393,7 +400,8 @@ def t_create(a):
     if a.get("colors"):
         sc["colors"] = {**sc.get("colors", {}), **a["colors"]}
     put_project(name, sc)
-    return f"Created project {name!r}" + (f" as a copy of {base!r}" if base else " (empty clock faces, built-in intro / alarm / timer)")
+    note = f" (asked for {asked!r}; Studio keeps only letters, digits, spaces, - and _)" if name != asked else ""
+    return f"Created project {name!r}{note}" + (f" as a copy of {base!r}" if base else " (empty clock faces, built-in intro / alarm / timer)")
 
 
 def face_arg(a):
@@ -426,7 +434,9 @@ def t_set_face(a):
 def t_update(a):
     name, face_key = a["project"], face_arg(a)
     sc = get_project(name)
-    face = sc["faces"][face_key]
+    face = sc["faces"].get(face_key)
+    if not isinstance(face, dict):
+        raise StudioError(f"Project {name!r} has no {face_key} face yet; create it with set_face")
     by_id = {e.get("id"): e for e in face.get("elements", [])}
     done = []
     for ch in a.get("changes", []):
@@ -439,7 +449,7 @@ def t_update(a):
             if v is None:
                 el.pop(k, None)
             else:
-                el[k] = round(v) if isinstance(v, float) and k != "opacity" else v
+                el[k] = round(v) if isinstance(v, float) else v
         norm_element(el, face_key)
         done.append(ch["id"])
     rm = set(a.get("remove", []))
@@ -617,6 +627,9 @@ def main():
             reply(None, error={"code": -32700, "message": "Parse error"})
             continue
         for m in (msg if isinstance(msg, list) else [msg]):
+            if not isinstance(m, dict):
+                reply(None, error={"code": -32600, "message": "Invalid Request"})
+                continue
             try:
                 handle(m)
             except Exception as e:  # noqa: BLE001 — keep serving
