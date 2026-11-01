@@ -1,0 +1,12 @@
+services:
+  tab5studio:
+    build: .
+    container_name: tab5studio
+    restart: unless-stopped
+    ports:
+      - "${STUDIO_PORT:-8080}:8080"   # host port from STUDIO_PORT in .env (default 8080)
+    env_file: .env
+    volumes:
+      - ./data:/data          # projects, library, fonts, images, builds (and the ESP-IDF build cache)
+      - ./firmware:/studio/firmware:ro   # Tab5 firmware source (update with scripts/sync-firmware.sh)
+      - ./app:/studio/app:ro   # editor and server served live from the repo (restart after editing server.py)

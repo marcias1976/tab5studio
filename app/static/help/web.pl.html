@@ -1,0 +1,114 @@
+<section id="w-start">
+<h2>Strona www Tab5</h2>
+<p class="lead">Każdy Tab5 ma własną stronę do sterowania z telefonu albo komputera. Pięć zakładek: Pulpit (podgląd i szybkie akcje), Wygląd, Budzik, Harmonogram i System. Strona działa w tej samej sieci Wi-Fi co Tab5, bez internetu i bez konta.</p>
+<div class="two"><figure class="card"><img src="/static/help/web/pl/pin.webp" alt=""><figcaption>Ekran PIN-u</figcaption></figure>
+<div><h3>Jak otworzyć stronę</h3>
+<ol class="numbered"><li>Wpisz w przeglądarce <code>http://tab5.local</code> albo numer IP Tab5. IP widać na Tab5: ikona menu w prawym górnym rogu zegara → zakładka „Wi-Fi”.</li>
+<li>Podaj 4-cyfrowy <b>PIN</b> (ustawiony przy kompilacji w Studio). Po czwartej cyfrze strona otwiera się sama i zapamiętuje PIN na tym urządzeniu.</li>
+<li>Zły PIN — pola mrugają na czerwono. Po 5 złych próbach w ciągu 5 minut trzeba odczekać 30 sekund.</li>
+<li>Na telefonie dodaj stronę do ekranu głównego (Safari: Udostępnij → „Do ekranu początkowego”; Chrome: menu → „Dodaj do ekranu głównego”). Otwiera się wtedy jak aplikacja.</li></ol>
+<p class="tip">Jeśli <code>tab5.local</code> nie działa (np. na niektórych telefonach z Androidem), użyj numeru IP. Najlepiej nadaj Tab5 stały adres w routerze.</p></div></div>
+</section>
+
+<section id="w-layout">
+<h2>Układ strony</h2>
+<figure><img src="/static/help/web/pl/header.webp" alt=""><figcaption>Nagłówek z zakładkami zostaje u góry</figcaption></figure>
+<ul><li><b>Zakładki</b> — Pulpit, Wygląd, Budzik, Harmonogram (na telefonie „Plan”), System. Strona pamięta ostatnią zakładkę; adres zakładki (np. <code>#sys</code>) możesz dodać do zakładek przeglądarki.</li>
+<li><b>Kropka stanu</b> — zielona: Tab5 odpowiada. Czerwona: telefon nie widzi Tab5 (inna sieć, Tab5 wyłączony albo się uruchamia).</li>
+<li><b>PL / EN</b> — język strony na tym urządzeniu. Język samego Tab5 zmienisz w zakładce System.</li>
+<li><b>Odśwież</b> — pobiera aktualny stan i podgląd ekranu. Strona nie odświeża się sama, żeby nie obciążać Tab5.</li>
+<li><b>Wyloguj</b> — strona zapomina PIN na tym urządzeniu (na telefonie: sama ikona w nagłówku).</li>
+<li>Gdy alarm dzwoni, nad zakładkami pojawia się pasek z przyciskami <b>Drzemka</b> i <b>Wyłącz</b>.</li></ul>
+</section>
+
+<section id="w-home">
+<h2>Pulpit</h2>
+<figure><img src="/static/help/web/pl/tab_home.webp" alt=""><figcaption>Zakładka Pulpit</figcaption></figure>
+<ul><li><b>Podgląd</b> — obraz tego, co jest teraz na ekranie Tab5.</li>
+<li><b>Wariant-1 / 2 / 3</b> i <b>Jasny / Ciemny</b> — wariant zegara i tryb (Wariant-3, gdy projekt go ma).</li>
+<li><b>Włącz / Wyłącz</b> ekran od razu, <b>Pokaż intro</b>, <b>Jasność</b> w trybie jasnym: <b>Min</b> albo <b>Max</b> (dokładnie ustawisz ją w ustawieniach na Tab5).</li>
+<li><b>Teraz</b> — temperatura, wilgotność i ciśnienie z Open-Meteo (co 10 minut), miejscowość, Wi-Fi z jakością sygnału, czas od uruchomienia, <b>Ostatni start</b> (dlaczego Tab5 się uruchomił) i <b>Wersja programu</b> — data kompilacji ze Studio i jej opis.</li></ul>
+<p class="tip">Na zgaszonym ekranie dotknięcie zapala go na minutę.</p>
+</section>
+
+<section id="w-look">
+<h2>Wygląd</h2>
+<figure><img src="/static/help/web/pl/tab_look.webp" alt=""><figcaption>Zakładka Wygląd</figcaption></figure>
+<ul><li><b>Kolor cyfr</b> i <b>Kolor wartości sensorów</b> — gotowe kolory albo dowolny (tęczowe kółko); wartości mogą być „Jak cyfry”.</li>
+<li><b>Presety kolorów</b> — do 8 kafelków z podglądem kolorów; „dzień” / „noc” oznacza preset włączany z trybem. Klik włącza (aktywny ma żółtą ramkę), ołówek zmienia nazwę, kosz usuwa, „Zapisz obecne kolory” zapisuje nowy albo nadpisuje wybrany.</li>
+<li><b>Wariant po starcie</b>, <b>Zmiana wariantu</b> (samo przełączanie, gdy nikt nie dotyka ekranu) i <b>Wariant w nocy</b> (w godzinach trybu nocnego; rano wraca wariant startowy).</li>
+<li><b>Kolory w trybie jasnym / ciemnym</b> — preset włączany razem z trybem.</li></ul>
+<p class="tip">Kolory działają na elementy z kolorem „auto” w projekcie Studio.</p>
+</section>
+
+<section id="w-alarm">
+<h2>Budzik</h2>
+<figure><img src="/static/help/web/pl/tab_alarm.webp" alt=""><figcaption>Zakładka Budzik</figcaption></figure>
+<ul><li><b>+ Dodaj alarm</b> — do 10 alarmów. Zmiany zapisują się same.</li>
+<li>Przy alarmie: <b>godzina</b>, <b>nazwa</b> (widać ją na ekranie dzwonienia), <b>przełącznik</b> i <b>kosz</b>.</li>
+<li><b>Dni tygodnia</b> — kiedy dzwoni. <b>Raz</b> — jednorazowo, potem alarm sam się wyłącza.</li>
+<li><b>Głośność</b> i <b>Odsłuchaj</b> — sygnał gra 8 sekund; w tym czasie przycisk zmienia się na <b>Zatrzymaj</b>.</li>
+<li><b>Drzemka</b> — po ilu minutach alarm zadzwoni znowu; <b>Drzemka minutnika</b> — osobny czas dla minutnika.</li></ul>
+<div class="two"><figure><img src="/static/help/web/dev/tab5_ring.webp" alt=""><figcaption>Ekran dzwonienia na Tab5 (tu: koniec minutnika)</figcaption></figure>
+<div><h3>Na Tab5</h3><p>Dzwoniący alarm pokazuje godzinę, nazwę i przyciski <b>Drzemka</b> i <b>Wyłącz</b>. Alarm bez reakcji wyłącza się sam po 10 minutach. Wygląd tego ekranu zaprojektujesz w Studio (zakładka Alarm).</p></div></div>
+</section>
+
+<section id="w-plan">
+<h2>Harmonogram</h2>
+<figure><img src="/static/help/web/pl/tab_plan.webp" alt=""><figcaption>Zakładka Harmonogram</figcaption></figure>
+<ul><li><b>Tryb nocny</b> — od której do której zegar jest ciemny (domyślnie 23:00–5:40). Ręczna zmiana trybu działa do następnej z tych godzin.</li>
+<li><b>Wygaszanie ekranu</b> — godziny, w których ekran jest całkiem zgaszony.</li></ul>
+</section>
+
+<section id="w-sys">
+<h2>System</h2>
+<figure><img src="/static/help/web/pl/tab_sys.webp" alt=""><figcaption>Zakładka System</figcaption></figure>
+<h3>Urządzenie</h3>
+<ul><li><b>Miejscowość dla pogody</b> — nazwa (dowolny kraj) albo polski kod pocztowy. Kliknij <b>Szukaj</b> i wybierz z listy; pogoda odświeży się od razu.</li>
+<li><b>Język urządzenia</b> — polski albo angielski (menu, daty, przyciski Tab5); Tab5 uruchamia się ponownie.</li>
+<li><b>Restart</b> — Tab5 uruchamia się ponownie (ok. 10 sekund). Ustawienia zostają.</li></ul>
+<h3>Stan techniczny</h3>
+<ul><li>Wersja programu, slot programu, wolna pamięć (zielona, żółta poniżej 60 KB, czerwona poniżej 30 KB), ostatni crash i zawieszenia ekranu.</li>
+<li><b>Pamięć po krokach startu</b> — ile pamięci zostaje po każdej części startu.</li></ul>
+<h3>Kopia programu</h3>
+<ul><li><b>Program</b> (app.bin) — sam program. <b>Pełny instalator</b> (web-install.bin) — wszystko od zera, pod adres 0x0.</li>
+<li>Kopia nie zawiera ustawień ani haseł Wi-Fi. Ustawienia i alarmy kopiuje Studio (Podgląd → Kopie ustawień Tab5).</li></ul>
+<h3>Karta SD</h3>
+<ul><li>Model karty i wolne miejsce. <b>Formatuj</b> kasuje całą kartę (z potwierdzeniem).</li>
+<li>Pasek „Karta / Folder / …” — kliknij nazwę, aby wrócić wyżej. Ikona folderu z plusem — nowy folder. <b>Wgraj</b> — kilka plików naraz, z paskiem postępu.</li>
+<li>Przy plikach: strzałka pobiera, kosz usuwa (folder z zawartością).</li></ul>
+</section>
+
+<section id="w-device">
+<h2>Na samym Tab5</h2>
+<h3>Gesty na zegarze</h3>
+<table class="tbl"><tr><th>Gest</th><th>Co robi</th></tr>
+<tr><td><b>Dwuklik</b></td><td>Przełącza tryb jasny / ciemny.</td></tr>
+<tr><td><b>Przesunięcie w lewo / prawo</b></td><td>Zmienia wariant zegara.</td></tr>
+<tr><td><b>Przytrzymanie</b></td><td>Otwiera minutnik.</td></tr>
+<tr><td><b>Ikona menu</b> (prawy górny róg)</td><td>Otwiera ustawienia.</td></tr></table>
+<h3>Minutnik</h3>
+<div class="two"><figure><img src="/static/help/web/dev/tab5_timer.webp" alt=""><figcaption>Minutnik na Tab5</figcaption></figure>
+<div><ul><li>Dotknij <b>minut</b> albo <b>sekund</b> i zmieniaj je przyciskami − / + (przytrzymanie zmienia szybciej).</li>
+<li><b>5 / 10 / 15 min</b> — szybkie ustawienie. <b>Start</b> / <b>Pauza</b>, <b>Reset</b>.</li>
+<li>Nowy minutnik startuje od 00:00. <b>Powrót</b> wraca do zegara; minutnik liczy dalej, a w rogu widać ikonę z pozostałym czasem — dotknięcie otwiera minutnik.</li>
+<li>Po czasie dzwoni sygnał. <b>Drzemka</b> odlicza od nowa czas „Drzemka minutnika”.</li></ul></div></div>
+<h3>Ustawienia na Tab5</h3>
+<p>Ikona menu otwiera ustawienia, wspólne ze stroną www — zmiana w jednym miejscu jest widoczna w drugim. Sześć zakładek: Wi-Fi (sieci), Pogoda (miejscowość), Zegar, Ekran, Budzik i Inne. Duży przycisk <b>Powrót</b> wraca do zegara. Presety kolorów, nazwy i głośność alarmów ustawiasz tylko na stronie www.</p>
+<div class="two">
+<figure><img src="/static/help/web/dev/tab5_1.webp" alt=""><figcaption>Zegar — wariant, tryb, zmiana wariantu, kolory</figcaption></figure>
+<figure><img src="/static/help/web/dev/tab5_2.webp" alt=""><figcaption>Ekran — jasność, wyłączenie, intro, tryb nocny, wygaszanie</figcaption></figure>
+<figure><img src="/static/help/web/dev/tab5_3.webp" alt=""><figcaption>Budzik — lista; dotknięcie alarmu otwiera edycję: godzina, dni, włącz, usuń; drzemki</figcaption></figure>
+<figure><img src="/static/help/web/dev/tab5_4.webp" alt=""><figcaption>Inne — język, restart, wersja programu</figcaption></figure></div>
+</section>
+
+<section id="w-faq">
+<h2>Problemy i pytania</h2>
+<dl class="faq">
+<dt>Strona się nie otwiera</dt><dd>Telefon musi być w tej samej sieci Wi-Fi co Tab5. Zamiast <code>tab5.local</code> użyj numeru IP. Tuż po włączeniu Tab5 łączy się z Wi-Fi ok. 10 sekund.</dd>
+<dt>Nie pamiętam PIN-u</dt><dd>PIN ustawia się przy kompilacji w Studio. Skompiluj program z nowym PIN-em i wyślij go przez „Na Tab5” (albo wgraj app.bin) — ustawienia zostaną.</dd>
+<dt>Pogoda się nie pokazuje</dt><dd>Tab5 potrzebuje internetu. Sprawdź miejscowość w zakładce System.</dd>
+<dt>Tab5 sam się restartuje</dt><dd>Zobacz „Ostatni start” na Pulpicie i „Stan techniczny” w zakładce System. „Spadek napięcia” oznacza zwykle słaby zasilacz albo kabel.</dd>
+<dt>Kolory ze strony nie działają na moim projekcie</dt><dd>Kolory strony zmieniają tylko elementy z kolorem „auto”. Elementy z własnym kolorem ustawiasz w Studio.</dd>
+</dl>
+</section>

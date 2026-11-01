@@ -1,0 +1,116 @@
+<section id="w-start">
+<h2>Tab5 web page</h2>
+<p class="lead">Every Tab5 has its own page for control from a phone or computer. Five tabs: Home (preview and quick actions), Look, Alarm clock, Schedule and System. The page works in the same Wi-Fi network as the Tab5, without internet and without an account.</p>
+<div class="two"><figure class="card"><img src="/static/help/web/en/pin.webp" alt=""><figcaption>The PIN screen</figcaption></figure>
+<div><h3>Opening the page</h3>
+<ol class="numbered"><li>Type <code>http://tab5.local</code> or the Tab5 IP address in the browser. The IP is shown on the Tab5: menu icon in the top right corner of the clock → “Wi-Fi” tab.</li>
+<li>Enter the 4-digit <b>PIN</b> (set when building in Studio). After the fourth digit the page opens and remembers the PIN on this device.</li>
+<li>Wrong PIN — the fields blink red. After 5 wrong tries within 5 minutes you have to wait 30 seconds.</li>
+<li>On a phone, add the page to the home screen (Safari: Share → “Add to Home Screen”; Chrome: menu → “Add to Home screen”). It then opens like an app.</li></ol>
+<p class="tip">If <code>tab5.local</code> does not work (e.g. on some Android phones), use the IP address. A fixed address for the Tab5 in your router helps.</p></div></div>
+</section>
+
+<section id="w-layout">
+<h2>Page layout</h2>
+<figure><img src="/static/help/web/en/header.webp" alt=""><figcaption>The header with the tabs stays at the top</figcaption></figure>
+<ul><li><b>Tabs</b> — Home, Look, Alarm clock, Schedule, System. The page remembers the last tab; a tab's address (e.g. <code>#sys</code>) can be bookmarked.</li>
+<li><b>Status dot</b> — green: the Tab5 answers. Red: the phone can't see the Tab5 (another network, the Tab5 is off or starting).</li>
+<li><b>PL / EN</b> — the page language on this device. The Tab5's own language is in the System tab.</li>
+<li><b>Refresh</b> — gets the current state and the screen preview. The page does not refresh by itself, to spare the Tab5.</li>
+<li><b>Log out</b> — the page forgets the PIN on this device (on a phone: just the icon in the header).</li>
+<li>While an alarm rings, a bar with <b>Snooze</b> and <b>Stop</b> appears above the tabs.</li></ul>
+</section>
+
+<section id="w-home">
+<h2>Home</h2>
+<figure><img src="/static/help/web/en/tab_home.webp" alt=""><figcaption>The Home tab</figcaption></figure>
+<ul><li><b>Preview</b> — a picture of what the Tab5 screen shows now.</li>
+<li><b>Theme-1 / 2 / 3</b> and <b>Light / Dark</b> — the clock theme and the mode (Theme-3 when the design has one).</li>
+<li><b>On / Off</b> switches the screen right away, <b>Show intro</b>, <b>Brightness</b> in light mode: <b>Min</b> or <b>Max</b> (set it exactly in the settings on the Tab5).</li>
+<li><b>Now</b> — temperature, humidity and pressure from Open-Meteo (every 10 minutes), the place, Wi-Fi with signal quality, time since start, <b>Last start</b> (why the Tab5 started) and <b>Program version</b> — the date of the Studio build and its note.</li></ul>
+<p class="tip">When the screen is off, a touch lights it for a minute.</p>
+</section>
+
+<section id="w-look">
+<h2>Look</h2>
+<figure><img src="/static/help/web/en/tab_look.webp" alt=""><figcaption>The Look tab</figcaption></figure>
+<ul><li><b>Digit color</b> and <b>Sensor value color</b> — ready colors or any color (the rainbow circle); values can be “Like digits”.</li>
+<li><b>Color presets</b> — up to 8 tiles with a color preview; “day” / “night” marks a preset applied with the mode. A click applies one (the active one has a yellow frame), the pencil renames it, the bin deletes it, “Save current colors” saves a new one or overwrites a chosen one.</li>
+<li><b>Theme at start</b>, <b>Theme rotation</b> (switching by itself while nobody touches the screen) and <b>Theme at night</b> (during night-mode hours; in the morning the start theme comes back).</li>
+<li><b>Colors in light / dark mode</b> — a preset applied together with the mode.</li></ul>
+<p class="tip">The colors apply to elements with the “auto” color in the Studio design.</p>
+</section>
+
+<section id="w-alarm">
+<h2>Alarm clock</h2>
+<figure><img src="/static/help/web/en/tab_alarm.webp" alt=""><figcaption>The Alarm clock tab</figcaption></figure>
+<ul><li><b>+ Add alarm</b> — up to 10 alarms. Changes are saved by themselves.</li>
+<li>Each alarm: <b>time</b>, <b>name</b> (shown on the ringing screen), <b>switch</b> and <b>bin</b>.</li>
+<li><b>Weekdays</b> — when it rings. <b>Once</b> — a single time, then the alarm turns itself off.</li>
+<li><b>Volume</b> and <b>Listen</b> — the beep plays for 8 seconds; meanwhile the button turns into <b>Stop</b>.</li>
+<li><b>Snooze</b> — after how many minutes the alarm rings again; <b>Timer snooze</b> — a separate time for the timer.</li></ul>
+<div class="two"><figure><img src="/static/help/web/dev/tab5_ring.webp" alt=""><figcaption>The ringing screen on the Tab5 (here: the end of the timer)</figcaption></figure>
+<div><h3>On the Tab5</h3><p>A ringing alarm shows the time, the name and the <b>Snooze</b> and <b>Stop</b> buttons. With no reaction it stops by itself after 10 minutes. You can design this screen in Studio (the Alarm tab).</p></div></div>
+</section>
+
+<section id="w-plan">
+<h2>Schedule</h2>
+<figure><img src="/static/help/web/en/tab_plan.webp" alt=""><figcaption>The Schedule tab</figcaption></figure>
+<ul><li><b>Night mode</b> — from when to when the clock is dark (23:00–5:40 by default). A manual mode change lasts until the next of these times.</li>
+<li><b>Screen off schedule</b> — hours when the screen is completely off.</li></ul>
+</section>
+
+<section id="w-sys">
+<h2>System</h2>
+<figure><img src="/static/help/web/en/tab_sys.webp" alt=""><figcaption>The System tab</figcaption></figure>
+<h3>Device</h3>
+<ul><li><b>Place for the weather</b> — a name (any country) or a Polish postcode. Click <b>Search</b> and pick from the list; the weather refreshes right away.</li>
+<li><b>Device language</b> — Polish or English (Tab5 menu, dates, buttons); the Tab5 restarts.</li>
+<li><b>Restart</b> — the Tab5 starts again (about 10 seconds). Settings are kept.</li></ul>
+<h3>Technical state</h3>
+<ul><li>Program version, program slot, free memory (green, amber below 60 KB, red below 30 KB), the last crash and screen freezes.</li>
+<li><b>Memory after each start step</b> — how much memory is left after each part of the start.</li></ul>
+<h3>Program backup</h3>
+<ul><li><b>Program</b> (app.bin) — the program only. <b>Full installer</b> (web-install.bin) — everything from scratch, at 0x0.</li>
+<li>The backup has no settings or Wi-Fi passwords. Settings and alarms are copied by Studio (Preview → Tab5 settings backups).</li></ul>
+<h3>SD card</h3>
+<ul><li>Card model and free space. <b>Format</b> erases the whole card (after a confirmation).</li>
+<li>The “Card / Folder / …” bar — click a name to go up. The folder icon with a plus — new folder. <b>Upload</b> — several files at once, with a progress bar.</li>
+<li>Next to files: the arrow downloads, the bin deletes (a folder with its contents).</li></ul>
+</section>
+
+<section id="w-device">
+<h2>On the Tab5 itself</h2>
+<h3>Gestures on the clock</h3>
+<table class="tbl"><tr><th>Gesture</th><th>What it does</th></tr>
+<tr><td><b>Double tap</b></td><td>Switches light / dark mode.</td></tr>
+<tr><td><b>Swipe left / right</b></td><td>Changes the clock theme.</td></tr>
+<tr><td><b>Hold</b></td><td>Opens the timer.</td></tr>
+<tr><td><b>Menu icon</b> (top right corner)</td><td>Opens the settings.</td></tr>
+</table>
+<h3>Timer</h3>
+<div class="two"><figure><img src="/static/help/web/dev/tab5_timer.webp" alt=""><figcaption>The timer on the Tab5</figcaption></figure>
+<div><ul><li>Tap the <b>minutes</b> or <b>seconds</b> and change them with − / + (holding changes faster).</li>
+<li><b>5 / 10 / 15 min</b> — quick setting. <b>Start</b> / <b>Pause</b>, <b>Reset</b>.</li>
+<li>A new timer starts at 00:00. <b>Back</b> returns to the clock; the timer keeps counting and an icon with the time left shows in the corner — a tap opens the timer.</li>
+<li>When time is up, a sound rings. <b>Snooze</b> counts the “Timer snooze” time again.</li></ul></div></div>
+<h3>Settings on the Tab5</h3>
+<p>The menu icon opens the settings, shared with the web page — a change in one place shows in the other. Six tabs: Wi-Fi (networks), Weather (place), Clock, Screen, Alarms and Other. The big <b>Back</b> button returns to the clock. Color presets and alarm names and volume are set on the web page only.</p>
+<div class="two">
+<figure><img src="/static/help/web/dev/tab5_1.webp" alt=""><figcaption>Clock — theme, mode, theme rotation, colors</figcaption></figure>
+<figure><img src="/static/help/web/dev/tab5_2.webp" alt=""><figcaption>Screen — brightness, screen off, intro, night mode, screen off schedule</figcaption></figure>
+<figure><img src="/static/help/web/dev/tab5_3.webp" alt=""><figcaption>Alarms — the list; a tap opens the editor: time, days, on, delete; snooze times</figcaption></figure>
+<figure><img src="/static/help/web/dev/tab5_4.webp" alt=""><figcaption>Other — language, restart, program version</figcaption></figure></div>
+<p>The device screens above are shown in Polish; with the device language set to English they show English texts.</p>
+</section>
+
+<section id="w-faq">
+<h2>Problems and questions</h2>
+<dl class="faq">
+<dt>The page does not open</dt><dd>The phone must be in the same Wi-Fi network as the Tab5. Use the IP address instead of <code>tab5.local</code>. Right after power-on the Tab5 needs about 10 seconds to join Wi-Fi.</dd>
+<dt>I forgot the PIN</dt><dd>The PIN is set when building in Studio. Build with a new PIN and send it with “On Tab5” (or flash app.bin) — the settings are kept.</dd>
+<dt>No weather shown</dt><dd>The Tab5 needs internet. Check the place in the System tab.</dd>
+<dt>The Tab5 restarts by itself</dt><dd>See “Last start” on Home and “Technical state” in the System tab. “Brownout” usually means a weak power supply or cable.</dd>
+<dt>Page colours do not change my design</dt><dd>Page colours only change elements with the “auto” colour. Elements with their own colour are set in Studio.</dd>
+</dl>
+</section>

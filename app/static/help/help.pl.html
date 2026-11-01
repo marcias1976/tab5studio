@@ -1,0 +1,191 @@
+<section id="h-start">
+<h2>Tab5 Studio</h2>
+<p class="lead">Edytor do projektowania wyglądu M5Stack Tab5: wariantów zegara, intro, ekranu alarmu i minutnika. Program wgrywasz na Tab5 raz, a potem projekt zapisujesz na Tab5 jednym kliknięciem, bez kompilacji. Strona www Tab5, Wi-Fi, budzik, minutnik i ustawienia są w każdym programie.</p>
+<p class="author">Autor: <b>Jakub W.</b> · MARCIASMEDIA</p>
+<div class="steps">
+<div><span>1</span><b>Projektuj</b><p>Dodawaj elementy i układaj je na wyświetlaczu 1280×720.</p></div>
+<div><span>2</span><b>Sprawdź</b><p>Podgląd w Studio albo na żywo na Tab5, bez kompilacji.</p></div>
+<div><span>3</span><b>Zapisz na Tab5</b><p>Podgląd → Zapisz na Tab5 na stałe. Tab5 pokazuje projekt po każdym starcie.</p></div>
+<div><span>4</span><b>Kompiluj</b><p>Tylko do pierwszego wgrania (USB) i aktualizacji programu (Wi-Fi).</p></div>
+</div>
+</section>
+
+<section id="h-ui">
+<h2>Ekran roboczy</h2>
+<figure><img src="/static/help/pl/overview.webp" alt=""><figcaption>Główne części Studio</figcaption></figure>
+<ol class="legend">
+<li><b>Język Studio</b> — PL / EN. Zmienia tylko napisy edytora, nie projekt.</li>
+<li><b>Projekt</b> — nazwa oraz Nowy, Otwórz, Zapisz; obok Cofnij i Ponów. „Zapisz” pyta: nadpisać zapisany projekt czy zapisać jako nowy (pod istniejącą nazwą pyta o nadpisanie). Ctrl/Cmd + S zapisuje od razu obecny projekt. Po odświeżeniu strony Studio otwiera ostatni projekt, a niezapisane zmiany przywraca z przeglądarki. W oknie „Otwórz” przycisk <b>Eksportuj</b> pobiera projekt z jego obrazkami i czcionkami jako .zip (kopia albo przeniesienie na inny serwer), a <b>Importuj…</b> wczytuje taki plik.</li>
+<li><b>Ekrany</b> — Wariant-1, Wariant-2, Wariant-3 (opcjonalny), Intro, Alarm, Minutnik. Każdy projektujesz osobno.</li>
+<li><b>Biblioteka</b> — zapisane wersje obecnego ekranu.</li>
+<li><b>Dodaj element</b> — kliknięcie wstawia element na środek ekranu. Lista zależy od ekranu (np. „Nazwa alarmu” tylko na ekranie Alarm).</li>
+<li><b>Warstwy</b> — elementy ekranu. Wyżej = na wierzchu. Przeciągnij, aby zmienić kolejność; dwuklik zmienia nazwę; oko ukrywa, kłódka blokuje przed przesuwaniem, kosz usuwa (Ctrl+Z cofa).</li>
+<li><b>Menu Tab5</b> — na wariantach zegara prawy górny róg (ramka „MENU”) zajmuje przycisk menu urządzenia. Jest zawsze na wierzchu, więc nie stawiaj tam ważnych elementów.</li>
+<li><b>Minutnik Tab5</b> — lewy górny róg (ramka „MINUTNIK”) zajmuje plakietka z pozostałym czasem, gdy minutnik liczy w tle. Wolisz inne miejsce? Dodaj element <b>Minutnik</b> i postaw go, gdzie chcesz: na tym wariancie zastępuje plakietkę, a róg zostaje wolny. W podglądzie przycisk symulacji minutnika pokazuje plakietkę tak, jak na Tab5.</li>
+<li><b>Wyświetlacz</b> — przeciągaj elementy, uchwyty zmieniają rozmiar.</li>
+<li><b>Właściwości</b> — ustawienia zaznaczonego elementu albo, gdy nic nie jest zaznaczone, całego ekranu (tło, paleta, czas).</li>
+<li><b>Dolny panel</b> — Zasoby (obrazki i czcionki) oraz Kompilacja. Uchwyt na górnej krawędzi zmienia wysokość, strzałka po prawej zwija panel.</li>
+<li><b>Powiększenie</b> — − / + i dopasowanie do okna.</li>
+<li><b>Pomoc</b> — ta instrukcja (klawisz <kbd>?</kbd> albo <kbd>F1</kbd>).</li>
+<li><b>Podgląd</b> — w Studio albo na Tab5; tu są też zapis na Tab5, zrzut ekranu, kopie ustawień i połączenie z Tab5.</li>
+<li><b>Wyloguj</b> (ikona drzwi na końcu nagłówka) — widoczne, gdy Studio ma hasło; po wylogowaniu wracasz do strony logowania.</li>
+</ol>
+</section>
+
+<section id="h-elements">
+<h2>Elementy</h2>
+<table class="tbl">
+<tr><th>Element</th><th>Co pokazuje</th></tr>
+<tr><td><b>Cyfrowy</b></td><td>Zegar z cyfr LED (segmenty). Opcje: sekundy, „zgaszone segmenty” — słabo widoczne nieświecące segmenty jak w prawdziwym wyświetlaczu.</td></tr>
+<tr><td><b>Tekstowy</b></td><td>Zegar wybraną czcionką; format godziny, sekundy.</td></tr>
+<tr><td><b>Analogowy</b></td><td>Tarcza ze wskazówkami godzin, minut i sekund; kolory tarczy, wskazówek i podziałki.</td></tr>
+<tr><td><b>Sensor</b></td><td>Temperatura, wilgotność albo ciśnienie z pogody Tab5, z jednostką i liczbą miejsc po przecinku. Także temperatura max / min dziś i jutro.</td></tr>
+<tr><td><b>Data</b></td><td>Dzień tygodnia, dzień i miesiąc w kilku formatach; język jak język Tab5.</td></tr>
+<tr><td><b>Miejscowość</b></td><td>Nazwa miejscowości wybranej na Tab5. W Studio wpisz dowolną w „Podgląd dla”, żeby zobaczyć długą nazwę.</td></tr>
+<tr><td><b>Pogoda</b></td><td>Ikona pogody teraz albo na jutro (zmienia się sama: słońce lub księżyc, chmury, mgła, mżawka, deszcz, śnieg, burza) albo godzina wschodu / zachodu słońca — z prognozy Open-Meteo dla miejscowości ustawionej na Tab5.</td></tr>
+<tr><td><b>Prognoza</b></td><td>Jeden dzień prognozy (dziś … za 6 dni): dzień tygodnia, ikona, temperatura max i min. Przycisk „Ułóż cały tydzień” we Właściwościach wstawia 7 dni obok siebie — np. Wariant-3 jako ekran pogody na tydzień.</td></tr>
+<tr><td><b>Alarm</b></td><td>Tylko na wariantach zegara. Na Tab5 widoczny, gdy włączony jest jakiś alarm (także w trakcie dzwonienia i drzemki); jednorazowy alarm po zakończeniu sam się wyłącza, więc znika. „Pokaż”: ikonę i godzinę, samą ikonę albo samą godzinę najbliższego alarmu. Ikona i godzina mają osobne rozmiary i kolory, godzina — własną czcionkę.</td></tr>
+<tr><td><b>Minutnik</b></td><td>Tylko na wariantach zegara. Na Tab5 widoczny, gdy minutnik liczy: ikona i / albo pozostały czas MM:SS. Na wariancie z tym elementem nie ma pigułki minutnika w rogu ekranu.</td></tr>
+<tr><td><b>Loader</b></td><td>Animacja: pasek, kropki, kółko, pierścień, fala. Na ekranie Intro pasek wypełnia się przez czas trwania intro.</td></tr>
+<tr><td><b>Tekst</b></td><td>Dowolny napis, czcionka, wielkość, wyrównanie.</td></tr>
+<tr><td><b>Ikona</b></td><td>Ponad 1500 ikon Lucide z wyszukiwarką.</td></tr>
+<tr><td><b>Obraz</b></td><td>Wstawiasz go kliknięciem miniatury w zakładce Zasoby (PNG, JPG, WebP, SVG). Przezroczystość jest zachowana.</td></tr>
+<tr><td><b>Prostokąt, Elipsa, Linia</b></td><td>Kształty: wypełnienie, zaokrąglenie, obramowanie, grubość.</td></tr>
+<tr><td><b>Nazwa alarmu, Czas minutnika, Start/Pauza</b></td><td>Tylko na ekranach Alarm i Minutnik — pokazują treść z Tab5.</td></tr>
+</table>
+<figure><img src="/static/help/pl/element.webp" alt=""><figcaption>Zaznaczony zegar: uchwyty na wyświetlaczu i jego właściwości po prawej</figcaption></figure>
+<h3>Kolory „auto” i paleta</h3>
+<p>Gdy nic nie jest zaznaczone, panel Właściwości pokazuje <b>paletę</b> ekranu: kolor cyfr zegara i kolor wartości. Element z zaznaczonym „auto” bierze kolor z palety. Na Tab5 paletę zmienisz później na stronie www (kolory i presety kolorów) — zmienią się wszystkie elementy „auto”. Elementy z własnym kolorem zostają bez zmian.</p>
+<h3>Wspólne właściwości</h3>
+<ul><li><b>Nazwa</b> — jak element nazywa się w warstwach.</li>
+<li><b>X, Y, W, H</b> — położenie i rozmiar w pikselach ekranu Tab5.</li>
+<li><b>Krycie</b> — przezroczystość elementu.</li>
+<li><b>Ułóż</b> — środek poziomo / pionowo, na wierzch, na spód, duplikuj, usuń.</li></ul>
+</section>
+
+<section id="h-select">
+<h2>Grupowanie</h2>
+<figure><img src="/static/help/pl/multi.webp" alt=""><figcaption>Kilka zaznaczonych elementów: wspólne przesuwanie, skalowanie i wyrównanie</figcaption></figure>
+<ul><li><kbd>Shift</kbd> / <kbd>Cmd</kbd> + klik — dodaje element do zaznaczenia; <kbd>Ctrl/Cmd</kbd> + <kbd>A</kbd> — wszystkie widoczne.</li>
+<li><kbd>Ctrl/Cmd</kbd> + <kbd>G</kbd> grupuje, <kbd>Ctrl/Cmd</kbd> + <kbd>Shift</kbd> + <kbd>G</kbd> rozgrupowuje. Klik w element grupy zaznacza całą grupę; dwuklik albo klik w warstwach — jeden element z grupy.</li>
+<li>Grupę przesuwasz i skalujesz razem (np. ikona z wartością sensora).</li>
+<li>Dla kilku elementów panel Właściwości pokazuje <b>wyrównanie</b>: do lewej, do prawej, do góry, do dołu oraz środki w poziomie i w pionie.</li>
+<li>Linie pomocnicze przyciągają do krawędzi i środków innych elementów oraz ekranu. Przytrzymaj <kbd>Shift</kbd> podczas przeciągania, aby wyłączyć przyciąganie.</li></ul>
+</section>
+
+<section id="h-intro">
+<h2>Intro</h2>
+<figure><img src="/static/help/pl/intro.webp" alt=""><figcaption>Ekran Intro z wbudowanym wyglądem</figcaption></figure>
+<p>Intro pokazuje się po uruchomieniu Tab5 i po „Pokaż intro” na stronie www. Domyślnie zaznaczony jest <b>wbudowany wygląd</b> (logo MARCIASMEDIA z paskiem). Odznacz go, aby zaprojektować własne:</p>
+<ul><li><b>Czas trwania</b> — jak długo intro jest na ekranie.</li>
+<li>Loader „Pasek” wypełnia się dokładnie przez ten czas; inne loadery kręcą się w kółko.</li>
+<li>„Podgląd → Na Tab5” na tym ekranie od razu odtwarza intro na urządzeniu.</li></ul>
+</section>
+
+<section id="h-alarm">
+<h2>Alarm i Minutnik</h2>
+<div class="two"><figure><img src="/static/help/pl/alarm.webp" alt=""><figcaption>Wbudowany ekran alarmu</figcaption></figure>
+<figure><img src="/static/help/pl/timer.webp" alt=""><figcaption>Wbudowany minutnik</figcaption></figure></div>
+<p>Ekran <b>Alarm</b> pokazuje się, gdy dzwoni budzik albo skończy się minutnik. <b>Minutnik</b> otwiera się po przytrzymaniu palca na zegarze. Oba mają wbudowany wygląd; po odznaczeniu „Wbudowany wygląd” dostajesz szkic do przerobienia.</p>
+<figure><img src="/static/help/pl/alarm_custom.webp" alt=""><figcaption>Własny ekran alarmu: prostokąt „Drzemka” ma akcję po dotknięciu</figcaption></figure>
+<div class="two"><figure class="narrow"><img src="/static/help/pl/props_alarm.webp" alt=""><figcaption>Sekcja „Po dotknięciu”</figcaption></figure>
+<div><h3>Akcje po dotknięciu</h3>
+<p>Każdy element (obrazek, kształt, tekst, ikona) może być przyciskiem. Wybierz akcję w sekcji <b>Po dotknięciu</b>:</p>
+<ul><li><b>Alarm:</b> Drzemka, Wyłącz.</li>
+<li><b>Minutnik:</b> Start/Pauza, Reset, +1 min, −1 min, +5 s, −5 s, Ustaw czas (np. 10 min), Zamknij.</li></ul>
+<p>W grupie ustaw akcję na tych elementach, które mają reagować (dwuklik zaznacza jeden element grupy).</p>
+<p>Elementy <b>Nazwa alarmu</b>, <b>Czas minutnika</b> i <b>Start/Pauza</b> pokazują aktualną treść z Tab5.</p></div></div>
+<figure><img src="/static/help/pl/timer_custom.webp" alt=""><figcaption>Własny minutnik ze szkicu</figcaption></figure>
+</section>
+
+<section id="h-library">
+<h2>Biblioteka i projekty</h2>
+<figure><img src="/static/help/pl/library.webp" alt=""><figcaption>Biblioteka zegarów</figcaption></figure>
+<ul><li><b>Biblioteka</b> trzyma wiele wersji każdego rodzaju ekranu: zegary (pasują na Wariant-1 i Wariant-2), intro, alarmy i minutniki.</li>
+<li><b>Zapisz</b> — wpisz nazwę i zapisz obecny ekran. Zapis pod istniejącą nazwą pyta o nadpisanie.</li>
+<li>Przy każdej pozycji: <b>Wczytaj</b> (dla zegarów: na Wariant-1 albo Wariant-2), zmiana nazwy, usunięcie. Miniatura pokazuje wygląd.</li>
+<li><b>Projekt</b> (przyciski Nowy / Otwórz / Zapisz u góry) to cały zestaw: warianty zegara, intro, alarm, minutnik i paleta — to, co wysyłasz na Tab5. „Nowy” daje pusty projekt.</li></ul>
+<p class="tip">Przykład: w Bibliotece masz pięć zegarów. Do projektu „Zima” wczytujesz „Duży LED” jako Wariant-1 i „Analogowy” jako Wariant-2, zapisujesz projekt, a potem Podgląd → Zapisz na Tab5 na stałe.</p>
+</section>
+
+<section id="h-assets">
+<h2>Zasoby: obrazki i czcionki</h2>
+<figure><img src="/static/help/pl/assets.webp" alt=""><figcaption>Dolny panel, zakładka Zasoby</figcaption></figure>
+<ul><li><b>Obrazki</b> — Wgraj PNG, JPG, WebP albo SVG. Kliknięcie miniatury wstawia obraz na ekran. Do programu trafiają tylko obrazki użyte w projekcie.</li>
+<li><b>Czcionki</b> — wbudowane (Inter, Orbitron, Roboto Mono, Bebas Neue, Oswald, Rajdhani Bold) i Twoje pliki TTF/OTF, oznaczone ★. Czcionka obsługuje polskie znaki, jeśli ma je plik.</li></ul>
+</section>
+
+<section id="h-preview">
+<h2>Podgląd</h2>
+<div class="two"><figure class="narrow"><img src="/static/help/pl/preview_menu.webp" alt=""><figcaption>Menu Podgląd</figcaption></figure>
+<div><ul><li><b>W Studio</b> (klawisz <kbd>P</kbd>) — sam ekran, z tykającym zegarem i animacjami. − / + zmienia powiększenie (od 50% do 100%; domyślnie 100%, mniej tylko w małym oknie). „Alarm włączony” i „Minutnik liczy” pokazują wskaźniki alarmu i minutnika (albo pigułkę minutnika w rogu) tak, jak na Tab5, <kbd>Esc</kbd> zamyka.</li>
+<li><b>Na Tab5</b> — wysyła projekt na urządzenie bez kompilacji. Tab5 pokazuje go do zamknięcia podglądu albo restartu; ten podgląd nie jest zapisywany (do tego służy „Zapisz na Tab5 na stałe”). Na ekranach Alarm i Minutnik Tab5 od razu otwiera dany ekran.</li>
+<li><b>Połączenie z Tab5</b> — adres (np. 192.168.1.50 albo tab5.local) i PIN strony www. Przycisk „Sprawdź połączenie” pokazuje, czy Tab5 odpowiada.</li>
+<li><b>Połączenie z Tab5</b> pokazuje też wersję programu na Tab5 (datę i godzinę kompilacji).</li>
+<li>Gdy na Tab5 trwa podgląd, przycisk <b>Podgląd</b> jest żółty. „Na Tab5” wysyła zmiany jeszcze raz, a <b>Zamknij podgląd na Tab5</b> w tym menu kończy podgląd: Tab5 wraca do zapisanego projektu (albo do wyglądu z programu).</li></ul></div></div>
+<h3>Zapisz na Tab5 na stałe</h3>
+<figure><img src="/static/help/pl/save_tab5.webp" alt=""><figcaption>Okno zapisu projektu na Tab5: rozmiar projektu i wolne miejsce</figcaption></figure>
+<ul><li><b>Zapisz na Tab5 na stałe</b> — Tab5 zapisuje projekt i pokazuje go po każdym starcie. Nie trzeba kompilować ani wgrywać programu: kompilacja zostaje tylko do aktualizacji samego programu. Paleta projektu (kolory „auto”) trafia przy tym do ustawień Tab5, więc kolory są takie jak w Studio; później zmienisz je na stronie www Tab5 albo w jego menu.</li>
+<li>Projekt trafia do pamięci Tab5 (ok. 3,3 MB, a po jednym wgraniu przez USB tej lub nowszej wersji ok. 6,8 MB; bez karty SD). Zwykły zegar zajmuje 0,2–0,5 MB; dużo miejsca biorą tylko obrazki na cały ekran (ok. 1,8 MB każdy). Okno pokazuje rozmiar projektu i wolne miejsce. Na Tab5 jest jeden zapisany projekt: każdy zapis zastępuje poprzedni.</li>
+<li>Zapisany projekt używa kolorów „auto” jak program: paleta i presety kolorów ze strony www Tab5 dalej działają.</li>
+<li><b>Wariant-3</b>: zakładka obok Wariantu-2, włączana przełącznikiem „Użyj Wariantu-3” (włącza się też sama po dodaniu pierwszego elementu). Tab5 przełącza wtedy 1 → 2 → 3 przesunięciem palca; można go też wybrać na stronie www i w ustawieniach Tab5. Działa w podglądzie i w zapisanym projekcie, nie w skompilowanym programie. Tab5 buduje go tylko na czas pokazywania, więc nie zajmuje pamięci. Przycisk <b>„Wstaw prognozę na tydzień”</b> (gdy nic nie jest zaznaczone) wstawia gotowy ekran pogody: miejscowość, data, godzina, pogoda teraz i 7 dni od dziś; pierwszy dzień to „Dziś”. Ten sam ekran ma „Original Project”, który Studio zapisuje przy pierwszym uruchomieniu, i każdy nowy projekt.</li>
+<li>Pod <b>Przywróć wygląd z programu</b> Studio pisze, jaki projekt jest zapisany na Tab5 i czy jest taki jak otwarty („taki jak otwarty” / „otwarty ma zmiany”). Ten przycisk usuwa zapisany projekt z Tab5.</li>
+<li>Gdy zapisany projekt trzy razy z rzędu zakończy się restartem przy starcie, Tab5 go pomija i startuje z wyglądem z programu. Studio pokazuje wtedy komunikat; zapisz projekt jeszcze raz albo go usuń.</li>
+<li>Tab5 ze starszym programem, który nie umie zapisywać projektów, potrzebuje raz pełnego <b>web-install.bin</b> przez USB. Kasuje on ustawienia Tab5; Wi-Fi z pliku .env jest w programie.</li></ul>
+</section>
+
+<section id="h-build">
+<h2>Kompilacja i wgrywanie</h2>
+<figure><img src="/static/help/pl/build.webp" alt=""><figcaption>Dolny panel, zakładka Kompilacja</figcaption></figure>
+<ol class="numbered"><li>Zapisz projekt (kompilowany jest obecny stan edytora).</li>
+<li>Wybierz <b>język startowy</b> Tab5 (później zmienisz go w ustawieniach Tab5 albo na stronie www).</li>
+<li>Opcjonalnie wpisz nowy 4-cyfrowy <b>PIN strony www</b>. Puste pole = PIN z ustawień serwera. PIN nie jest nigdzie zapisywany.</li>
+<li>Opcjonalnie wpisz <b>Opis</b> (np. „większy zegar”): widać go na liście kompilacji i na Tab5 w Menu → Inne → Wersja programu. Wersja programu to data i godzina kompilacji.</li>
+<li>Kliknij <b>Kompiluj .bin</b> albo <b>Kompiluj i wyślij</b> — ten drugi po kompilacji od razu wysyła program na Tab5. Pierwsza kompilacja trwa kilka minut, kolejne ok. minuty. Postęp widać w dzienniku.</li>
+<li>Przy kompilacji na liście <b>Poprzednie kompilacje</b>: <b>Na Tab5</b> wysyła program przez Wi-Fi, strzałka pobiera <b>web-install.bin</b>. Kompilacja, która działa teraz na Tab5, ma zielone pole. Studio trzyma 10 ostatnich kompilacji (i tę z Tab5), starsze usuwa samo.</li></ol>
+<h3>Kopie ustawień Tab5</h3>
+<ul><li><b>Podgląd → Kopie ustawień Tab5…</b> — kopia ustawień, presetów kolorów i alarmów Tab5 oraz projektu zapisanego ze Studio. Studio robi ją samo przed każdym wysłaniem programu; „Zrób kopię teraz” robi ją od ręki. Zostaje 20 ostatnich kopii.</li>
+<li><b>Przywróć</b> wgrywa kopię na Tab5 (Tab5 się restartuje), a potem Studio zapisuje na nim projekt z kopii. Przydaje się po wgraniu przez USB, które kasuje ustawienia. Hasła Wi-Fi nie są kopiowane.</li>
+<li><b>Podgląd → Zrzut ekranu z Tab5</b> pokazuje, co Tab5 wyświetla w tej chwili.</li>
+<li>Gdy Tab5 ma mało pamięci albo zrestartował się po błędzie lub zawieszeniu, Studio pokazuje ostrzeżenie. Szczegóły są na stronie www Tab5 w karcie „Stan techniczny”.</li></ul>
+<table class="tbl">
+<tr><th>Sposób</th><th>Kiedy</th></tr>
+<tr><td><b>Na Tab5</b> (Wi-Fi)</td><td>Zwykła aktualizacja. Ustawienia, sieci Wi-Fi, alarmy i zapisany projekt zostają. Gdy nowy program nie ruszy w 30 s, Tab5 wraca do poprzedniego.</td></tr>
+<tr><td><b>tab5panel-web-install.bin</b> pod 0x0 (USB)</td><td>Instalacja od zera, np. nowy Tab5 albo pierwsza instalacja tej wersji. Kasuje ustawienia i zapisany projekt.</td></tr>
+</table>
+<h3>Wgrywanie przez ESP Web Tool (Chrome / Edge)</h3>
+<ol class="numbered"><li>Podłącz Tab5 kablem USB-C do komputera.</li>
+<li>Otwórz <b>espressif.github.io/esptool-js</b>, kliknij <b>Connect</b> i wybierz port Tab5.</li>
+<li>W polu Flash Address wpisz adres z tabeli, wybierz plik i kliknij <b>Program</b>.</li>
+<li>Po zakończeniu naciśnij przycisk reset na Tab5 albo odłącz i podłącz kabel.</li></ol>
+<p class="tip">Kopię programu, który jest teraz na Tab5, pobierzesz na jego stronie www w zakładce System → „Kopia programu” — dzięki temu zawsze możesz wrócić do poprzedniej wersji.</p>
+</section>
+
+<section id="h-keys">
+<h2>Skróty klawiszowe</h2>
+<table class="tbl keys">
+<tr><td><kbd>Ctrl/Cmd</kbd> <kbd>S</kbd></td><td>Zapisz projekt (od razu; nowy projekt — okno zapisu)</td></tr>
+<tr><td><kbd>Ctrl/Cmd</kbd> <kbd>Z</kbd> / <kbd>Shift</kbd> <kbd>Z</kbd> albo <kbd>Y</kbd></td><td>Cofnij / ponów</td></tr>
+<tr><td><kbd>Ctrl/Cmd</kbd> <kbd>D</kbd></td><td>Duplikuj zaznaczone</td></tr>
+<tr><td><kbd>Ctrl/Cmd</kbd> <kbd>C</kbd> / <kbd>V</kbd></td><td>Kopiuj / wklej — także na inny wariant, ekran albo do innego projektu (w to samo miejsce)</td></tr>
+<tr><td><kbd>Ctrl/Cmd</kbd> <kbd>A</kbd></td><td>Zaznacz wszystkie widoczne</td></tr>
+<tr><td><kbd>Ctrl/Cmd</kbd> <kbd>G</kbd> / <kbd>Shift</kbd> <kbd>G</kbd></td><td>Grupuj / rozgrupuj</td></tr>
+<tr><td><kbd>Delete</kbd> / <kbd>Backspace</kbd></td><td>Usuń zaznaczone</td></tr>
+<tr><td>Strzałki (z <kbd>Shift</kbd>)</td><td>Przesuń o 1 px (10 px)</td></tr>
+<tr><td><kbd>Shift</kbd> + przeciąganie</td><td>Bez przyciągania</td></tr>
+<tr><td><kbd>P</kbd></td><td>Podgląd w Studio</td></tr>
+<tr><td><kbd>Esc</kbd></td><td>Zamknij podgląd, okno albo odznacz</td></tr>
+<tr><td><kbd>?</kbd> / <kbd>F1</kbd></td><td>Pomoc</td></tr>
+</table>
+</section>
+
+<section id="h-faq">
+<h2>Problemy i pytania</h2>
+<dl class="faq">
+<dt>„Na Tab5” mówi, że Tab5 nie odpowiada</dt><dd>Sprawdź adres i PIN w „Połączenie z Tab5”. Serwer Studio musi być w tej samej sieci co Tab5. Najlepiej nadaj Tab5 stały adres IP w routerze.</dd>
+<dt>Tab5 pisze, że nie ma podglądu na żywo</dt><dd>Na Tab5 jest starszy program. Wgraj raz nową kompilację — potem podgląd działa.</dd>
+<dt>Kompilacja kończy się błędem</dt><dd>Ostatnie linie dziennika mówią, co się stało. Najczęściej to brak miejsca (bardzo duże obrazki) albo brak połączenia z internetem przy pierwszej kompilacji.</dd>
+<dt>Na Tab5 kolory są inne niż w Studio</dt><dd>Elementy „auto” biorą kolor z palety, którą można zmienić na stronie www Tab5. Ustaw elementowi własny kolor, jeśli ma się nie zmieniać.</dd>
+<dt>Gdzie są moje projekty?</dt><dd>Na serwerze, w folderze <code>data/</code> (projekty, biblioteka, zasoby, kompilacje). Zrób kopię tego folderu, aby niczego nie stracić.</dd>
+</dl>
+</section>

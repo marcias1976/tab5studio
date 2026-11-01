@@ -1,0 +1,15 @@
+# Local
+.env
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+data/
+
+# Firmware: build output, downloaded components and secrets
+firmware/build/
+firmware/managed_components/
+firmware/main/studio/
+firmware/main/wifi_secrets.h
+firmware/main/web_secrets.h
+firmware/sdkconfig.old

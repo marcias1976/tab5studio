@@ -1,0 +1,191 @@
+<section id="h-start">
+<h2>Tab5 Studio</h2>
+<p class="lead">An editor for designing the look of the M5Stack Tab5: clock themes, the intro, the alarm screen and the timer. You flash the program to the Tab5 once, then save the project on the Tab5 with one click, without building. The Tab5 web page, Wi-Fi, alarms, timer and settings are in every build.</p>
+<p class="author">Author: <b>Jakub W.</b> · MARCIASMEDIA</p>
+<div class="steps">
+<div><span>1</span><b>Design</b><p>Add elements and arrange them on the 1280×720 display.</p></div>
+<div><span>2</span><b>Check</b><p>Preview in Studio or live on the Tab5, without building.</p></div>
+<div><span>3</span><b>Save to the Tab5</b><p>Preview → Save to the Tab5 for good. The Tab5 shows the project after every start.</p></div>
+<div><span>4</span><b>Build</b><p>Only for the first flash (USB) and program updates (Wi-Fi).</p></div>
+</div>
+</section>
+
+<section id="h-ui">
+<h2>Workspace</h2>
+<figure><img src="/static/help/en/overview.webp" alt=""><figcaption>The main parts of Studio</figcaption></figure>
+<ol class="legend">
+<li><b>Studio language</b> — PL / EN. Changes the editor texts only, not the project.</li>
+<li><b>Project</b> — name, New, Open, Save; next to it Undo and Redo. “Save” asks: overwrite the saved project or save it as a new one (an existing name asks before overwriting). Ctrl/Cmd + S saves the current project right away. After a page reload Studio opens the last project and brings back unsaved changes from the browser. In the “Open” dialog, <b>Export</b> downloads the project with its images and fonts as a .zip (a backup, or to move it to another server), and <b>Import…</b> loads such a file.</li>
+<li><b>Screens</b> — Theme-1, Theme-2, Theme-3 (optional), Intro, Alarm, Timer. Each one is designed separately.</li>
+<li><b>Library</b> — saved versions of the current screen.</li>
+<li><b>Add element</b> — a click puts the element in the middle of the screen. The list depends on the screen (e.g. “Alarm name” only on the Alarm screen).</li>
+<li><b>Layers</b> — the elements of the screen. Higher = in front. Drag to reorder; double-click renames; the eye hides, the lock stops it from moving, the bin deletes (Ctrl+Z undoes).</li>
+<li><b>Tab5 menu</b> — on the clock themes the top right corner (the “MENU” frame) holds the device's menu button. It is always on top, so keep important elements out of it.</li>
+<li><b>Tab5 timer</b> — the top left corner (the “TIMER” frame) holds the pill with the time left while the timer counts in the background. Want it elsewhere? Add a <b>Timer</b> element and place it anywhere: on that theme it replaces the pill and the corner stays free. In the preview the timer simulation button shows the pill as on the Tab5.</li>
+<li><b>Display</b> — drag elements; the handles resize them.</li>
+<li><b>Properties</b> — settings of the selected element or, with nothing selected, of the whole screen (background, palette, duration).</li>
+<li><b>Bottom panel</b> — Assets (images and fonts) and Build. The handle on the top edge changes its height, the arrow on the right collapses it.</li>
+<li><b>Zoom</b> — − / + and fit to the window.</li>
+<li><b>Help</b> — this guide (<kbd>?</kbd> or <kbd>F1</kbd> key).</li>
+<li><b>Preview</b> — in Studio or on the Tab5; here are also saving to the Tab5, the screenshot, settings backups and the Tab5 connection.</li>
+<li><b>Sign out</b> (the door icon at the end of the header) — shown when Studio has a password; it takes you back to the sign-in page.</li>
+</ol>
+</section>
+
+<section id="h-elements">
+<h2>Elements</h2>
+<table class="tbl">
+<tr><th>Element</th><th>What it shows</th></tr>
+<tr><td><b>Digital</b></td><td>A clock of LED digits (segments). Options: seconds, “unlit segments” — faint unlit segments as on a real display.</td></tr>
+<tr><td><b>Text</b> (clock)</td><td>A clock in the chosen font; hour format, seconds.</td></tr>
+<tr><td><b>Analog</b></td><td>A dial with hour, minute and second hands; colours of the dial, hands and ticks.</td></tr>
+<tr><td><b>Sensor</b></td><td>Temperature, humidity or pressure from the Tab5 weather, with unit and decimals. Also the max / min temperature today and tomorrow.</td></tr>
+<tr><td><b>Date</b></td><td>Weekday, day and month in several formats; in the Tab5 language.</td></tr>
+<tr><td><b>Place</b></td><td>The name of the place chosen on the Tab5. In Studio, type any place in “Preview for” to see a long name.</td></tr>
+<tr><td><b>Weather</b></td><td>The weather icon now or for tomorrow (it changes by itself: sun or moon, clouds, fog, drizzle, rain, snow, storm), or the sunrise / sunset time — from the Open-Meteo forecast for the place set on the Tab5.</td></tr>
+<tr><td><b>Forecast</b></td><td>One day of the forecast (today … in 6 days): weekday, icon, max and min temperature. “Lay out the whole week” in Properties places 7 days side by side — e.g. Theme-3 as a weekly weather screen.</td></tr>
+<tr><td><b>Alarm</b></td><td>Clock themes only. On the Tab5 it shows while any alarm is on (also while ringing and snoozing); a one-time alarm switches itself off when it ends, so it goes away. “Show”: icon and time, icon only or time only of the next alarm. The icon and the time have their own sizes and colors, the time its own font.</td></tr>
+<tr><td><b>Timer</b></td><td>Clock themes only. On the Tab5 it shows while the timer runs: icon and / or the time left, MM:SS. A theme with this element has no timer pill in the corner.</td></tr>
+<tr><td><b>Loader</b></td><td>Animation: bar, dots, spinner, ring, wave. On the Intro screen the bar fills over the intro duration.</td></tr>
+<tr><td><b>Text</b></td><td>Any text, font, size, alignment.</td></tr>
+<tr><td><b>Icon</b></td><td>Over 1500 Lucide icons with search.</td></tr>
+<tr><td><b>Image</b></td><td>Inserted by clicking its thumbnail in the Assets tab (PNG, JPG, WebP, SVG). Transparency is kept.</td></tr>
+<tr><td><b>Rectangle, Ellipse, Line</b></td><td>Shapes: fill, corner radius, border, width.</td></tr>
+<tr><td><b>Alarm name, Timer time, Start/Pause</b></td><td>Only on the Alarm and Timer screens — they show the content from the Tab5.</td></tr>
+</table>
+<figure><img src="/static/help/en/element.webp" alt=""><figcaption>A selected clock: handles on the display and its properties on the right</figcaption></figure>
+<h3>“Auto” colours and the palette</h3>
+<p>With nothing selected, the Properties panel shows the screen <b>palette</b>: the clock digit colour and the value colour. An element with “auto” ticked takes its colour from the palette. On the Tab5 you can change the palette later on the web page (colours and colour presets) — all “auto” elements follow. Elements with their own colour stay as they are.</p>
+<h3>Common properties</h3>
+<ul><li><b>Name</b> — how the element is called in the layers.</li>
+<li><b>X, Y, W, H</b> — position and size in Tab5 screen pixels.</li>
+<li><b>Opacity</b> — transparency of the element.</li>
+<li><b>Arrange</b> — center horizontally / vertically, to front, to back, duplicate, delete.</li></ul>
+</section>
+
+<section id="h-select">
+<h2>Grouping</h2>
+<figure><img src="/static/help/en/multi.webp" alt=""><figcaption>Several selected elements: move, scale and align together</figcaption></figure>
+<ul><li><kbd>Shift</kbd> / <kbd>Cmd</kbd> + click — adds an element to the selection; <kbd>Ctrl/Cmd</kbd> + <kbd>A</kbd> — all visible ones.</li>
+<li><kbd>Ctrl/Cmd</kbd> + <kbd>G</kbd> groups, <kbd>Ctrl/Cmd</kbd> + <kbd>Shift</kbd> + <kbd>G</kbd> ungroups. A click on a grouped element selects the whole group; double-click or a click in the layers — one element of the group.</li>
+<li>A group moves and scales together (e.g. an icon with its sensor value).</li>
+<li>For several elements the Properties panel shows <b>alignment</b>: left, right, top, bottom, and centers horizontally and vertically.</li>
+<li>Guide lines snap to the edges and centers of other elements and of the screen. Hold <kbd>Shift</kbd> while dragging to turn snapping off.</li></ul>
+</section>
+
+<section id="h-intro">
+<h2>Intro</h2>
+<figure><img src="/static/help/en/intro.webp" alt=""><figcaption>The Intro screen with the built-in look</figcaption></figure>
+<p>The intro shows after the Tab5 starts and after “Show intro” on the web page. The <b>built-in look</b> (MARCIASMEDIA logo with a bar) is ticked by default. Untick it to design your own:</p>
+<ul><li><b>Duration</b> — how long the intro stays on screen.</li>
+<li>The “Bar” loader fills exactly over that time; other loaders loop.</li>
+<li>“Preview → On the Tab5” on this screen plays the intro on the device right away.</li></ul>
+</section>
+
+<section id="h-alarm">
+<h2>Alarm and Timer</h2>
+<div class="two"><figure><img src="/static/help/en/alarm.webp" alt=""><figcaption>The built-in alarm screen</figcaption></figure>
+<figure><img src="/static/help/en/timer.webp" alt=""><figcaption>The built-in timer</figcaption></figure></div>
+<p>The <b>Alarm</b> screen shows when an alarm rings or the timer ends. The <b>Timer</b> opens when you hold a finger on the clock. Both have a built-in look; untick “Built-in look” to get a draft to rework.</p>
+<figure><img src="/static/help/en/alarm_custom.webp" alt=""><figcaption>Your own alarm screen: the “Snooze” rectangle has a tap action</figcaption></figure>
+<div class="two"><figure class="narrow"><img src="/static/help/en/props_alarm.webp" alt=""><figcaption>The “On tap” section</figcaption></figure>
+<div><h3>Tap actions</h3>
+<p>Any element (image, shape, text, icon) can be a button. Choose the action in the <b>On tap</b> section:</p>
+<ul><li><b>Alarm:</b> Snooze, Stop.</li>
+<li><b>Timer:</b> Start/Pause, Reset, +1 min, −1 min, +5 s, −5 s, Set time (e.g. 10 min), Close.</li></ul>
+<p>In a group, set the action on the elements that should react (double-click selects one element of a group).</p>
+<p>The <b>Alarm name</b>, <b>Timer time</b> and <b>Start/Pause</b> elements show the current content from the Tab5.</p></div></div>
+<figure><img src="/static/help/en/timer_custom.webp" alt=""><figcaption>Your own timer from the draft</figcaption></figure>
+</section>
+
+<section id="h-library">
+<h2>Library and projects</h2>
+<figure><img src="/static/help/en/library.webp" alt=""><figcaption>The clock library</figcaption></figure>
+<ul><li>The <b>Library</b> keeps many versions of each kind of screen: clocks (they fit Theme-1 and Theme-2), intros, alarms and timers.</li>
+<li><b>Save</b> — type a name and save the current screen. Saving under an existing name asks before overwriting.</li>
+<li>Each entry has: <b>Load</b> (for clocks: into Theme-1 or Theme-2), rename, delete. The thumbnail shows the look.</li>
+<li>A <b>project</b> (New / Open / Save at the top) is the whole set: the clock themes, intro, alarm, timer and palette — what you send to the Tab5. “New” gives an empty project.</li></ul>
+<p class="tip">Example: the Library holds five clocks. For the “Winter” project you load “Big LED” as Theme-1 and “Analog” as Theme-2, save the project, then Preview → Save to the Tab5 for good.</p>
+</section>
+
+<section id="h-assets">
+<h2>Assets: images and fonts</h2>
+<figure><img src="/static/help/en/assets.webp" alt=""><figcaption>Bottom panel, Assets tab</figcaption></figure>
+<ul><li><b>Images</b> — Upload PNG, JPG, WebP or SVG. A click on a thumbnail puts the image on the screen. Only images used in the project go into the build.</li>
+<li><b>Fonts</b> — built-in (Inter, Orbitron, Roboto Mono, Bebas Neue, Oswald, Rajdhani Bold) and your own TTF/OTF files, marked ★. A font shows Polish characters if the file has them.</li></ul>
+</section>
+
+<section id="h-preview">
+<h2>Preview</h2>
+<div class="two"><figure class="narrow"><img src="/static/help/en/preview_menu.webp" alt=""><figcaption>The Preview menu</figcaption></figure>
+<div><ul><li><b>In Studio</b> (<kbd>P</kbd> key) — the screen alone, with a ticking clock and animations. − / + zooms (50% to 100%; 100% by default, less only in a small window). “Alarm on” and “Timer running” show the alarm and timer badges (or the timer pill in the corner) as on the Tab5, <kbd>Esc</kbd> closes.</li>
+<li><b>On the Tab5</b> — sends the project to the device without building. The Tab5 shows it until the preview is closed or the device restarts; this preview is not stored (that is what “Save to the Tab5 for good” is for). On the Alarm and Timer screens the Tab5 opens that screen right away.</li>
+<li><b>Tab5 connection</b> — address (e.g. 192.168.1.50 or tab5.local) and the web page PIN. “Test connection” shows whether the Tab5 answers.</li>
+<li><b>Tab5 connection</b> also shows the program version on the Tab5 (the date and time of its build).</li>
+<li>While a preview is on the Tab5, the <b>Preview</b> button is yellow. “On the Tab5” sends the changes again, and <b>Close the preview on the Tab5</b> in that menu ends it: the Tab5 goes back to the saved project (or to the look of its program).</li></ul></div></div>
+<h3>Save to the Tab5 for good</h3>
+<figure><img src="/static/help/en/save_tab5.webp" alt=""><figcaption>Saving the project on the Tab5: project size and free space</figcaption></figure>
+<ul><li><b>Save to the Tab5 for good</b> — the Tab5 saves the project and shows it after every start. No building or flashing: you build only to update the program itself. The project palette (the “auto” colors) goes to the Tab5 settings too, so the colors match Studio; you can change them later on the Tab5 web page or in its menu.</li>
+<li>The project goes to the Tab5 memory (about 3.3 MB, or about 6.8 MB after one USB flash of this or a newer version; no SD card needed). A usual clock takes 0.2–0.5 MB; only full-screen images take a lot (about 1.8 MB each). The dialog shows the project size and the free space. The Tab5 keeps one saved project: every save replaces the previous one.</li>
+<li>A saved project uses “auto” colors like a program: the palette and color presets from the Tab5 web page still apply.</li>
+<li><b>Theme-3</b>: the tab next to Theme-2, switched on with “Use Theme-3” (it also switches on when you add its first element). A swipe then switches 1 → 2 → 3 on the Tab5; you can also pick it on the web page and in the Tab5 settings. It works in the preview and in the saved project, not in a compiled program. The Tab5 builds it only while it is shown, so it takes no memory. <b>“Insert the weather for a week”</b> (with nothing selected) inserts a ready weather screen: place, date, time, the weather now and 7 days from today; the first day reads “Today”. The “Original Project” Studio saves on its first start, and every new project, has the same screen.</li>
+<li>Under <b>Restore the program's look</b> Studio shows which project is saved on the Tab5 and whether it matches the open one (“same as the open one” / “the open one has changes”). This button deletes the saved project from the Tab5.</li>
+<li>When the saved project ends in a restart three starts in a row, the Tab5 skips it and starts with the look of its program. Studio then shows a message; save the project again or delete it.</li>
+<li>A Tab5 with an older program that cannot save projects needs the full <b>web-install.bin</b> over USB once. It erases the Tab5 settings; the Wi-Fi from the .env file is in the program.</li></ul>
+</section>
+
+<section id="h-build">
+<h2>Building and flashing</h2>
+<figure><img src="/static/help/en/build.webp" alt=""><figcaption>Bottom panel, Build tab</figcaption></figure>
+<ol class="numbered"><li>Save the project (the current state of the editor is built).</li>
+<li>Choose the Tab5 <b>start language</b> (you can change it later in the Tab5 settings or on the web page).</li>
+<li>Optionally type a new 4-digit <b>web page PIN</b>. Empty = the PIN from the server settings. The PIN is not stored anywhere.</li>
+<li>Optionally type a <b>Note</b> (e.g. “bigger clock”): it shows in the build list and on the Tab5 in Menu → Other → Program version. The program version is the date and time of the build.</li>
+<li>Click <b>Build .bin</b> or <b>Build and send</b> — the second one sends the program to the Tab5 right after the build. The first build takes a few minutes, later ones about a minute. The log shows progress.</li>
+<li>Next to a build in <b>Previous builds</b>: <b>On the Tab5</b> sends the program over Wi-Fi, the arrow downloads <b>web-install.bin</b>. The build running on the Tab5 now has a green field. Studio keeps the 10 newest builds (and the one on the Tab5) and deletes older ones by itself.</li></ol>
+<h3>Tab5 settings backups</h3>
+<ul><li><b>Preview → Tab5 settings backups…</b> — a copy of the Tab5 settings, color presets and alarms, and of the project saved from Studio. Studio makes one by itself before every program update; “Back up now” makes one right away. The 20 newest backups are kept.</li>
+<li><b>Restore</b> writes the backup to the Tab5 (it restarts), then Studio saves the project from the backup on it. Handy after a USB flash, which erases the settings. Wi-Fi passwords are not copied.</li>
+<li><b>Preview → Tab5 screenshot</b> shows what the Tab5 displays right now.</li>
+<li>When the Tab5 is low on memory, or restarted after an error or a freeze, Studio shows a warning. The details are on the Tab5 web page, “Technical state” card.</li></ul>
+<table class="tbl">
+<tr><th>How</th><th>When</th></tr>
+<tr><td><b>On the Tab5</b> (Wi-Fi)</td><td>Normal update. Settings, Wi-Fi networks, alarms and the saved project stay. When the new program does not start within 30 s, the Tab5 goes back to the previous one.</td></tr>
+<tr><td><b>tab5panel-web-install.bin</b> at 0x0 (USB)</td><td>Install from scratch, e.g. a new Tab5 or the first install of this version. Erases the settings and the saved project.</td></tr>
+</table>
+<h3>Flashing with ESP Web Tool (Chrome / Edge)</h3>
+<ol class="numbered"><li>Connect the Tab5 to the computer with a USB-C cable.</li>
+<li>Open <b>espressif.github.io/esptool-js</b>, click <b>Connect</b> and choose the Tab5 port.</li>
+<li>Type the address from the table in Flash Address, choose the file and click <b>Program</b>.</li>
+<li>When it finishes, press the reset button on the Tab5 or unplug and plug the cable.</li></ol>
+<p class="tip">You can download a copy of the program now on the Tab5 from its web page, System tab → “Program backup” — so you can always go back to the previous version.</p>
+</section>
+
+<section id="h-keys">
+<h2>Keyboard shortcuts</h2>
+<table class="tbl keys">
+<tr><td><kbd>Ctrl/Cmd</kbd> <kbd>S</kbd></td><td>Save project (right away; a new project opens the save dialog)</td></tr>
+<tr><td><kbd>Ctrl/Cmd</kbd> <kbd>Z</kbd> / <kbd>Shift</kbd> <kbd>Z</kbd> or <kbd>Y</kbd></td><td>Undo / redo</td></tr>
+<tr><td><kbd>Ctrl/Cmd</kbd> <kbd>D</kbd></td><td>Duplicate selection</td></tr>
+<tr><td><kbd>Ctrl/Cmd</kbd> <kbd>C</kbd> / <kbd>V</kbd></td><td>Copy / paste — also onto another theme, screen or project (in the same place)</td></tr>
+<tr><td><kbd>Ctrl/Cmd</kbd> <kbd>A</kbd></td><td>Select all visible</td></tr>
+<tr><td><kbd>Ctrl/Cmd</kbd> <kbd>G</kbd> / <kbd>Shift</kbd> <kbd>G</kbd></td><td>Group / ungroup</td></tr>
+<tr><td><kbd>Delete</kbd> / <kbd>Backspace</kbd></td><td>Delete selection</td></tr>
+<tr><td>Arrows (with <kbd>Shift</kbd>)</td><td>Move by 1 px (10 px)</td></tr>
+<tr><td><kbd>Shift</kbd> + drag</td><td>No snapping</td></tr>
+<tr><td><kbd>P</kbd></td><td>Preview in Studio</td></tr>
+<tr><td><kbd>Esc</kbd></td><td>Close preview or dialog, or deselect</td></tr>
+<tr><td><kbd>?</kbd> / <kbd>F1</kbd></td><td>Help</td></tr>
+</table>
+</section>
+
+<section id="h-faq">
+<h2>Problems and questions</h2>
+<dl class="faq">
+<dt>“On the Tab5” says the Tab5 does not answer</dt><dd>Check the address and PIN in “Tab5 connection”. The Studio server must be in the same network as the Tab5. A fixed IP for the Tab5 in your router helps.</dd>
+<dt>The Tab5 says it has no live preview</dt><dd>The Tab5 runs an older program. Flash a new build once — then the preview works.</dd>
+<dt>The build fails</dt><dd>The last lines of the log say what happened. Most often it is a lack of space (very large images) or no internet connection on the first build.</dd>
+<dt>Colours on the Tab5 differ from Studio</dt><dd>“Auto” elements take the palette colour, which can be changed on the Tab5 web page. Give an element its own colour if it must not change.</dd>
+<dt>Where are my projects?</dt><dd>On the server, in the <code>data/</code> folder (projects, library, assets, builds). Back up this folder so nothing gets lost.</dd>
+</dl>
+</section>

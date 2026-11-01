@@ -1,0 +1,1304 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B0D10">
+<title>Tab5 panel</title>
+<style>
+  :root {
+    --bg: #0B0D10; --card: #15181C; --card2: #1C2025; --line: #262A30;
+    --text: #E9E4DA; --dim: #8A8F96; --accent: #FFC83D; --accent-ink: #1A1408;
+    --good: #6FCF8E; --bad: #FF6B6B; --radius: 20px;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.4 -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif; }
+  body { background: radial-gradient(120% 60% at 50% 0%, #1A1612 0%, var(--bg) 60%) fixed; }
+  main { max-width: 1080px; margin: 0 auto; padding: 20px 16px 40px; }
+
+  /* The header stays at the top while the page scrolls */
+  header { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin: -20px -16px 16px; padding: 12px 16px 10px;
+    position: sticky; top: 0; z-index: 12; border-bottom: 1px solid transparent; transition: border-color .2s;
+    background: color-mix(in srgb, var(--bg) 62%, transparent); -webkit-backdrop-filter: blur(18px) saturate(1.4); backdrop-filter: blur(18px) saturate(1.4); }
+  header.stuck { border-bottom-color: var(--line); }
+  header > svg { width: 36px; height: 40px; flex: none; }
+  .brand { min-width: 0; font-weight: 650; letter-spacing: 4px; font-size: 18px; }
+  .brand small { display: block; font-weight: 400; letter-spacing: 0; font-size: 13px; color: var(--dim); }
+  .pill { margin-left: auto; display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--dim);
+    background: var(--card); border: 1px solid var(--line); padding: 6px 12px; border-radius: 12px; }
+  .logout { margin-left: 8px; padding: 7px 12px; border-radius: 12px; font-size: 13px; color: var(--dim);
+    display: inline-flex; align-items: center; gap: 6px; }
+  .logout svg { width: 15px; height: 15px; }
+  .logout:hover { color: var(--text); }
+  .langsw { display: inline-flex; margin-left: 8px; border: 1px solid var(--line); border-radius: 12px; padding: 3px; background: var(--card); }
+  .langsw button { border: 0; background: transparent; padding: 4px 9px; border-radius: 8px; font-size: 12px; font-weight: 600; color: var(--dim); }
+  .langsw button.on { background: var(--accent); color: #1A1408; }
+  .backup { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .backup a { display: flex; flex-direction: column; gap: 3px; padding: 12px 14px; border-radius: 14px; text-decoration: none; color: var(--text);
+    background: var(--card2); border: 1px solid var(--line); transition: border-color .15s; }
+  .backup a:hover { border-color: var(--accent); }
+  .backup a span { font-size: 12px; color: var(--dim); }
+  @media (max-width: 560px) { .backup { grid-template-columns: 1fr; } }
+  .places { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+  .places button { text-align: left; padding: 10px 14px; border-radius: 12px; display: flex; flex-direction: column; gap: 2px; }
+  .places button b { font-weight: 600; }
+  .places button span { font-size: 13px; color: var(--dim); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--bad); }
+  .dot.on { background: var(--good); box-shadow: 0 0 8px var(--good); }
+
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; min-width: 0; }
+
+  /* Tabs in the pinned header: one topic at a time instead of one long page */
+  .tabs { order: 10; flex-basis: 100%; display: flex; gap: 4px; padding: 4px; background: var(--card); border: 1px solid var(--line);
+    border-radius: 16px; overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tabs button { flex: 1 0 auto; display: flex; align-items: center; justify-content: center; gap: 8px; border: 0; background: transparent;
+    padding: 9px 12px; border-radius: 12px; color: var(--dim); font-size: 14px; white-space: nowrap; }
+  .tabs button svg { width: 18px; height: 18px; flex: none; }
+  .tabs button:hover { color: var(--text); }
+  .tabs button.on { background: var(--accent); color: var(--accent-ink); font-weight: 600; }
+  .tabs .ts { display: none; }  /* short label, phone only */
+  .tab { display: none; }
+  .tab.on { display: grid; gap: 14px; align-items: start; }
+  @media (min-width: 900px) {
+    .tab.cols.on { grid-template-columns: 1fr 1fr; }
+    /* Pulpit: "Teraz" as tall as the preview card next to it, its contents spread over the height */
+    .tab[data-tab=home].on, .tab[data-tab=look].on { align-items: stretch; }
+    .tab[data-tab=home] .card:last-child { display: flex; flex-direction: column; }
+    .tab[data-tab=home] .card:last-child .facts { margin-top: auto; padding-top: 18px; border-top: 1px solid var(--line); }
+    .tab[data-tab=home] .card:last-child .weather { flex: 1; margin-bottom: 18px; }
+    .tab[data-tab=home] .card:last-child .metric { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px; padding: 16px; }
+    .tab[data-tab=home] .card:last-child .metric b { font-size: 40px; line-height: 1; white-space: nowrap; }
+    .tab[data-tab=home] .card:last-child .facts { gap: 18px 16px; font-size: 15px; }
+  }
+  /* Phone: five equal columns, the active one only changes color (a bold label would push the others) */
+  @media (max-width: 560px) {
+    .tabs { display: grid; grid-template-columns: repeat(5, 1fr); overflow: hidden; }
+    .tabs button { flex-direction: column; gap: 3px; padding: 7px 2px; font-size: 11px; min-width: 0; }
+    .tabs button span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+    .tabs button.on { font-weight: 400; }
+    .tabs .tl { display: none; } .tabs .ts { display: inline; }
+    .tabs button svg { width: 20px; height: 20px; }
+  }
+  .num { font-variant-numeric: tabular-nums; }
+  .slider { margin-top: 16px; } #brightness { min-width: 150px; }
+  .row.head { margin-bottom: 4px; } .row.head h2 { margin: 0; }
+  .small-btn { padding: 8px 14px; font-size: 14px; }
+  .facts .wide { grid-column: 1 / -1; }
+  #pcMsg:not(:empty) { margin-top: 10px; }
+  .files { max-height: 360px; overflow-y: auto; }
+  h2 { margin: 0 0 16px; font-size: 13px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--dim); }
+  .row { display: flex; align-items: center; gap: 12px; }
+  .row + .row { margin-top: 14px; }
+  .grow { flex: 1; min-width: 0; }
+  .sub { color: var(--dim); font-size: 14px; }
+
+  /* Status */
+  .weather { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+  .metric { background: var(--card2); border-radius: 16px; padding: 14px; }
+  .metric b { display: block; font-size: 28px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .metric b small { font-size: 15px; font-weight: 400; color: var(--dim); margin-left: 3px; }
+  .metric span { font-size: 13px; color: var(--dim); }
+  .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; font-size: 14px; }
+  .facts div span { color: var(--dim); display: block; font-size: 12px; }
+  .facts b.warn { color: #F5B13D; } .facts b.bad { color: #FF6B6B; } .facts b.good { color: #6FCF8E; }
+  details.boot { margin-top: 12px; font-size: 13px; } details.boot summary { cursor: pointer; color: var(--dim); }
+  details.boot table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  details.boot td { padding: 3px 0; border-bottom: 1px solid #ffffff10; } details.boot td + td { text-align: right; color: var(--dim); }
+
+  /* Buttons */
+  button { font: inherit; color: var(--text); background: var(--card2); border: 1px solid var(--line);
+    border-radius: 14px; padding: 12px 16px; cursor: pointer; transition: background .15s, border-color .15s, transform .05s; }
+  button:active { transform: scale(.97); }
+  button:focus { outline: none; }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+  button.danger { color: var(--bad); }
+  .btns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+
+  .seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; background: var(--card2);
+    border: 1px solid var(--line); border-radius: 14px; padding: 4px; gap: 4px; }
+  .seg button { border: 0; background: transparent; padding: 10px 8px; border-radius: 10px; color: var(--dim); }
+  .seg button.on { background: var(--accent); color: var(--accent-ink); font-weight: 600; }
+
+  .controls { display: flex; justify-content: space-between; gap: 8px; margin-top: 14px; }
+  .controls .seg { gap: 2px; padding: 3px; }
+  .palette { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 16px; }
+  .palette .label { flex: 1 0 100%; font-size: 14px; color: var(--dim); margin-bottom: 2px; }
+  .swatch { position: relative; width: 28px; height: 28px; padding: 0; border-radius: 50%; border: 2px solid transparent;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); cursor: pointer; }
+  .swatch.on { border-color: var(--text); box-shadow: inset 0 0 0 3px var(--card); }
+  .swatch.custom { background: conic-gradient(#FF4B4B, #FFC83D, #5BE38A, #5BE7E1, #4DA3FF, #A98BFF, #FF6FB5, #FF4B4B); overflow: hidden; }
+  .swatch.custom input { position: absolute; inset: -8px; width: 46px; height: 46px; opacity: 0; cursor: pointer; border: 0; padding: 0; }
+  .swatch.auto { width: auto; padding: 0 12px; border-radius: 99px; background: var(--card2); color: var(--text); font-size: 13px;
+    display: inline-flex; align-items: center; gap: 6px; }
+  .swatch.auto i { width: 12px; height: 12px; border-radius: 50%; }
+  .palette .pbreak { flex-basis: 100%; height: 2px; }
+  .presets { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
+  /* Color presets as tiles: a preview of the clock in the preset's colors, the name, day / night tags */
+  .pgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+  .pcard { position: relative; display: flex; flex-direction: column; gap: 8px; padding: 8px; border-radius: 14px; text-align: left;
+    background: var(--card2); border: 1px solid var(--line); cursor: pointer; transition: border-color .15s; }
+  .pcard:hover { border-color: #3A3F47; }
+  .pcard.on { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+  .pprev { height: 56px; border-radius: 10px; background: #050505; display: flex; align-items: baseline; justify-content: center; gap: 8px;
+    padding-top: 12px; font-weight: 700; font-size: 26px; font-variant-numeric: tabular-nums; letter-spacing: .5px; }
+  .pprev small { font-size: 14px; font-weight: 600; }
+  .pname { display: flex; align-items: center; gap: 6px; min-width: 0; padding: 0 2px 2px; font-size: 14px; }
+  .pname span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ptag { flex: none; font-style: normal; font-size: 10.5px; font-weight: 600; padding: 2px 7px; border-radius: 99px; background: #241F14; color: var(--accent); }
+  .pacts { position: absolute; top: 12px; right: 12px; display: flex; gap: 4px; opacity: 0; transition: opacity .15s; }
+  .pcard:hover .pacts, .pcard:focus-within .pacts { opacity: 1; }
+  @media (hover: none) { .pacts { opacity: 1; } }
+  .pacts button { width: 28px; height: 28px; padding: 0; display: grid; place-items: center; border-radius: 8px; color: #C9CDD3;
+    background: rgba(20, 22, 26, .85); border: 1px solid rgba(255, 255, 255, .08); }
+  .pacts button:hover { color: var(--text); } .pacts button.del:hover { color: var(--bad); }
+  .pacts svg { width: 15px; height: 15px; }
+  .padd { min-height: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+    border: 1px dashed #3A3F47; border-radius: 14px; background: transparent; color: var(--dim); font-size: 14px; }
+  .padd:hover { border-color: var(--accent); color: var(--text); }
+  .padd svg { width: 22px; height: 22px; }
+  .presets .label { font-size: 14px; color: var(--dim); margin-bottom: 10px; }
+  .controls .seg button { padding: 9px clamp(7px, 2.4vw, 14px); font-size: clamp(12.5px, 3.4vw, 15px); white-space: nowrap; }
+
+  /* Inputs */
+  input[type=time], input[type=text], select { font: inherit; color: var(--text); background: var(--card2);
+    border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; color-scheme: dark; }
+  input:focus, select:focus { outline: none; border-color: var(--accent); }
+  input[type=range] { width: 100%; accent-color: var(--accent); }
+  .times { display: flex; align-items: center; gap: 8px; }
+
+  .switch { position: relative; width: 52px; height: 30px; flex: none; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .switch span { position: absolute; inset: 0; background: var(--card2); border: 1px solid var(--line);
+    border-radius: 99px; transition: .2s; cursor: pointer; }
+  .switch span::after { content: ""; position: absolute; left: 3px; top: 3px; width: 22px; height: 22px;
+    border-radius: 50%; background: var(--dim); transition: .2s; }
+  .switch input:checked + span { background: var(--accent); border-color: var(--accent); }
+  .switch input:checked + span::after { transform: translateX(22px); background: var(--accent-ink); }
+  .disabled { opacity: .45; pointer-events: none; }
+  .alarm { border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; margin-top: 10px; background: var(--card2); }
+  .alarm.off { opacity: .55; }
+  .alarm .top { display: flex; align-items: center; gap: 12px; }
+  .alarm .top input[type=time] { font-size: 26px; font-weight: 650; padding: 4px 10px; width: auto; }
+  .alarm .top input[type=text] { flex: 1; min-width: 0; }
+  .alarm .days { display: flex; gap: 6px; margin: 10px 0; flex-wrap: wrap; }
+  .alarm .days button { padding: 6px 0; width: 44px; border-radius: 99px; font-size: 13px; color: var(--dim); }
+  .alarm .days button.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+  .alarm .days .once { width: auto; padding: 6px 12px; }
+  .alarm .snd { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .alarm .snd .vol { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 180px; color: var(--dim); font-size: 13px; }
+  .alarm .icon-del { padding: 8px; color: var(--dim); display: flex; }
+  .alarm .icon-del:hover { color: var(--bad); }
+  .alarm .icon-del svg { width: 18px; height: 18px; }
+  @media (max-width: 560px) {
+    .alarm .top { flex-wrap: wrap; }
+    .alarm .top input[type=text] { order: 9; flex-basis: 100%; }
+    .alarm .top label.switch { margin-left: auto; }
+    .alarm .days button { width: 40px; }
+    header { gap: 8px; }
+    .brand { letter-spacing: 2px; font-size: 15px; }
+    .brand small { display: none; }
+    .pill { padding: 6px 9px; } .pill span { display: none; }
+    .logout { margin-left: 0; padding: 7px 10px; }
+  }
+  .alarm-ring { display: none; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 14px; margin: 0 0 14px;
+    border-radius: 14px; background: rgba(255, 200, 61, .12); border: 1px solid var(--accent); color: var(--accent); font-weight: 600; }
+  .alarm-ring.show { display: flex; }
+  hr { border: 0; border-top: 1px solid var(--line); margin: 16px 0; }
+
+  #toast { z-index: 40; position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px); opacity: 0;
+    background: var(--text); color: var(--bg); padding: 10px 18px; border-radius: 99px; font-size: 14px;
+    transition: .25s; pointer-events: none; }
+  #toast.show { opacity: 1; transform: translate(-50%, 0); }
+  /* Live preview of the screen */
+  .preview { position: relative; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden;
+    background: #000; border: 1px solid var(--line); }
+  .preview img { display: block; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .3s; }
+  .preview img.ready { opacity: 1; }
+
+  /* File manager */
+  .fm-bar { margin-top: 16px; }
+  .crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 2px; font-size: 14px; min-width: 0; }
+  .crumbs a { color: var(--dim); text-decoration: none; padding: 4px 6px; border-radius: 8px; cursor: pointer; }
+  .crumbs a:last-child { color: var(--text); font-weight: 600; }
+  .crumbs span { color: var(--line); }
+  .icon-btn { padding: 10px; display: grid; place-items: center; }
+  .icon-btn svg { width: 20px; height: 20px; }
+  label.button { display: inline-flex; align-items: center; gap: 8px; border-radius: 14px; padding: 11px 16px; cursor: pointer;
+    background: var(--accent); color: var(--accent-ink); font-weight: 600; }
+  label.button svg { width: 18px; height: 18px; }
+  .progress { height: 4px; border-radius: 4px; background: var(--card2); margin-top: 12px; overflow: hidden; display: none; }
+  .progress.show { display: block; }
+  .progress i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .15s; }
+  .files { margin-top: 12px; border-top: 1px solid var(--line); }
+  .file { display: flex; align-items: center; gap: 12px; padding: 10px 2px; border-bottom: 1px solid var(--line); }
+  .file.dir { cursor: pointer; }
+  .file .ico { width: 36px; height: 36px; flex: none; border-radius: 10px; display: grid; place-items: center; background: var(--card2); color: var(--dim); }
+  .file.dir .ico { color: var(--accent); background: #241F14; }
+  .file .ico svg { width: 20px; height: 20px; }
+  .file .name { font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .file .meta { font-size: 12px; color: var(--dim); }
+  .file .act { display: flex; gap: 6px; }
+  .file .act a, .file .act button { padding: 8px; border-radius: 10px; display: grid; place-items: center; color: var(--dim);
+    background: transparent; border: 1px solid transparent; }
+  .file .act a:hover, .file .act button:hover { background: var(--card2); color: var(--text); }
+  .file .act svg { width: 18px; height: 18px; }
+  .empty { color: var(--dim); font-size: 14px; text-align: center; padding: 22px 0 8px; }
+  .dialog input { width: 100%; margin: -8px 0 20px; font: inherit; color: var(--text); background: var(--card2);
+    border: 1px solid var(--line); border-radius: 12px; padding: 11px 12px; }
+  .dialog input:focus { outline: none; border-color: var(--accent); }
+  .dialog select { font: inherit; color: var(--text); background: var(--card2); border: 1px solid var(--line); border-radius: 12px; padding: 11px 12px; color-scheme: dark; }
+
+  /* PIN screen */
+  .lock { position: fixed; inset: 0; z-index: 50; display: none; align-items: center; justify-content: center; padding: 16px;
+    background: radial-gradient(120% 60% at 50% 0%, #1A1612 0%, var(--bg) 60%); }
+  .lock.show { display: flex; }
+  .lock-box { width: 100%; max-width: 340px; text-align: center; }
+  .lock-box svg { width: 64px; height: 70px; margin-bottom: 18px; }
+  .lock-box h1 { margin: 0; font-size: 18px; font-weight: 650; letter-spacing: 4px; }
+  .lock-box p { margin: 6px 0 28px; color: var(--dim); font-size: 15px; }
+  .pin { position: relative; display: grid; grid-template-columns: repeat(4, 56px); gap: 12px; justify-content: center; }
+  .pin i { height: 64px; border-radius: 16px; background: var(--card); border: 1px solid var(--line); display: grid; place-items: center;
+    transition: border-color .15s; }
+  .pin i.on::after { content: ""; width: 14px; height: 14px; border-radius: 50%; background: var(--text); }
+  .pin i.cur { border-color: var(--accent); }
+  .pin input { position: absolute; inset: 0; opacity: 0; font-size: 16px; width: 100%; height: 100%; border: 0; caret-color: transparent; }
+  .pin.bad { animation: shake .35s; }
+  .pin.bad i { border-color: var(--bad); }
+  @keyframes shake { 20%, 60% { transform: translateX(-8px); } 40%, 80% { transform: translateX(8px); } }
+  .lock-msg { min-height: 20px; margin-top: 16px; font-size: 14px; color: var(--bad); }
+
+  /* Confirmation dialog */
+  .modal { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; padding: 16px;
+    background: rgba(5, 6, 8, .72); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 30; }
+  .modal.show { opacity: 1; pointer-events: auto; }
+  .dialog { width: 100%; max-width: 380px; background: var(--card); border: 1px solid var(--line);
+    border-radius: 24px; padding: 26px 22px 20px; text-align: center; box-shadow: 0 24px 60px rgba(0,0,0,.5);
+    transform: translateY(12px) scale(.98); transition: transform .2s; }
+  .modal.show .dialog { transform: none; }
+  .dialog .icon { width: 56px; height: 56px; margin: 0 auto 14px; border-radius: 50%; display: grid; place-items: center;
+    background: rgba(255, 107, 107, .12); color: var(--bad); }
+  .dialog .icon.accent { background: rgba(255, 200, 61, .12); color: var(--accent); }
+  .dialog h3 { margin: 0 0 6px; font-size: 19px; font-weight: 650; }
+  .dialog p { margin: 0 0 22px; color: var(--dim); font-size: 15px; }
+  .dialog .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  button.solid-danger { background: var(--bad); border-color: var(--bad); color: #1A0A0A; font-weight: 600; }
+  footer { text-align: center; color: var(--dim); font-size: 13px; margin-top: 24px; }
+  footer b { color: var(--accent); font-weight: 500; }
+  @media (max-width: 500px) { .logout span { display: none; } .logout { padding: 7px 9px; margin-left: 4px; } }
+  /* Phone: one header row, nothing wider than the screen */
+  html, body { overflow-x: hidden; }
+  .controls { flex-wrap: wrap; } .controls .seg { flex: 1 1 auto; }
+  .metric { min-width: 0; }
+  @media (max-width: 560px) {
+    header { gap: 8px; } header > svg { width: 30px; height: 34px; }
+    .brand { font-size: 13px; letter-spacing: 1.5px; } .langsw { margin-left: 0; }
+    .card { padding: 14px; border-radius: 16px; } main { padding-top: 16px; }
+    .btns { gap: 8px; } .btns button { padding: 11px 6px; font-size: 14px; }
+    .weather { gap: 8px; } .metric { padding: 10px; } .metric b { font-size: 22px; } .metric b small { font-size: 12px; }
+    .times input[type=time] { padding: 8px; }
+    .palette { gap: 5px; }
+    header { gap: 6px; } .brand { font-size: 12px; letter-spacing: 1px; } .pill { padding: 6px 8px; }
+    .logout { margin-left: 0; padding: 7px 8px; }
+    .alarm .top input[type=time] { font-size: 22px; }
+  }
+  .fieldlabel { margin-bottom: 8px; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <svg viewBox="31 34 214 235" aria-hidden="true"><path fill="#FFC83D" fill-rule="evenodd" d="M244.879,93.11L244.896,93.11L244.896,209.662L244.688,209.662L244.882,209.768L138.147,268.448L31.411,209.768L31.605,209.662L31.463,209.662L31.463,93.141L31.411,93.112L138.147,34.432L244.879,93.11ZM61.145,195.764L61.145,109.459L138.147,151.792L215.214,109.423L215.214,195.598L173.919,218.353L173.919,173.791L138.147,193.458L102.44,173.827L102.44,218.485L61.145,195.764Z"/></svg>
+    <div class="brand">MARCIASMEDIA<small>Panel Tab5</small></div>
+    <div class="pill"><i class="dot" id="dot"></i><span id="conn">łączenie…</span></div>
+    <div class="langsw" id="langsw"><button data-lang="pl">PL</button><button data-lang="en">EN</button></div>
+    <button class="logout" id="reload" title="Odśwież"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4L21 8"/><path d="M21 3v5h-5"/></svg><span>Odśwież</span></button>
+    <button class="logout" id="logout" title="Wyloguj"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg><span>Wyloguj</span></button>
+    <nav class="tabs" id="tabs"><button data-tab="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Pulpit</span></button><button data-tab="look"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="1.5"/><circle cx="17.5" cy="10.5" r="1.5"/><circle cx="8.5" cy="7.5" r="1.5"/><circle cx="6.5" cy="12.5" r="1.5"/><path d="M12 2a10 10 0 0 0 0 20c1.1 0 2-.9 2-2 0-.5-.2-1-.5-1.3-.3-.4-.5-.8-.5-1.3 0-1.1.9-2 2-2h2.4A5.6 5.6 0 0 0 22 9.8C22 5.5 17.5 2 12 2z"/></svg><span>Wygląd</span></button><button data-tab="alarm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M5 3 2 6M22 6l-3-3"/></svg><span>Budzik</span></button><button data-tab="plan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg><span class="tl">Harmonogram</span><span class="ts">Plan</span></button><button data-tab="sys"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span>System</span></button></nav>
+  </header>
+  <div class="alarm-ring" id="alarmRing"><span class="grow">Budzik dzwoni</span><button id="alarmSnoozeNow">Drzemka</button><button class="danger" id="alarmStopNow">Wyłącz</button></div>
+
+  <!-- Pulpit: what the Tab5 shows and the quick controls -->
+  <div class="tab cols" data-tab="home">
+  <section class="card">
+    <div class="preview"><img id="preview" alt="Podgląd ekranu Tab5"></div>
+    <div class="controls">
+      <div class="seg" id="faces"></div>
+      <div class="seg"><button data-night="0">Jasny</button><button data-night="1">Ciemny</button></div>
+    </div>
+    <div class="btns">
+      <button id="scrOn">Włącz</button>
+      <button id="scrOff">Wyłącz</button>
+      <button id="intro">Pokaż intro</button>
+    </div>
+    <div class="row slider">
+      <div class="grow"><div>Jasność</div><div class="sub">W trybie jasnym</div></div>
+      <div class="seg" id="brightness"><button data-br="10">Min</button><button data-br="100">Max</button></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Teraz</h2>
+    <div class="weather">
+      <div class="metric"><b id="temp">—</b><span>Temperatura</span></div>
+      <div class="metric"><b id="hum">—</b><span>Wilgotność</span></div>
+      <div class="metric"><b id="pres">—</b><span>Ciśnienie</span></div>
+    </div>
+    <div class="facts">
+      <div><span>Miejscowość</span><b id="place">—</b></div>
+      <div><span>Wi-Fi</span><b id="wifi">—</b></div>
+      <div><span>Działa od</span><b id="uptime">—</b></div>
+      <div><span>Ostatni start</span><b id="reset">—</b></div>
+      <div class="wide"><span>Wersja programu</span><b id="build">—</b></div>
+    </div>
+  </section>
+  </div>
+
+  <!-- Wygląd: colors, presets and which theme shows when -->
+  <div class="tab cols" data-tab="look">
+  <section class="card">
+    <h2>Kolory</h2>
+    <div class="palette" id="palette"><div class="label">Kolor cyfr</div></div>
+    <div class="palette" id="palette2"><div class="label">Kolor wartości sensorów</div></div>
+    <div class="presets">
+      <div class="label">Presety kolorów</div>
+      <div class="pgrid" id="presetList"></div>
+      <button class="padd" id="presetSave"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Zapisz obecne kolory</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Warianty</h2>
+    <div class="row">
+      <div class="grow"><div>Wariant po starcie</div></div>
+      <select id="default_face"></select>
+    </div>
+    <div class="row">
+      <div class="grow"><div>Zmiana wariantu</div><div class="sub">Gdy nikt nie dotyka ekranu</div></div>
+      <select id="cycle_min">
+        <option value="0">wyłączona</option><option value="1">co 1 min</option><option value="2">co 2 min</option>
+        <option value="5">co 5 min</option><option value="10">co 10 min</option><option value="15">co 15 min</option>
+        <option value="30">co 30 min</option><option value="60">co godzinę</option>
+      </select>
+    </div>
+    <div class="row">
+      <div class="grow"><div>Wariant w nocy</div><div class="sub">W godzinach trybu nocnego; rano wraca wariant startowy</div></div>
+      <select id="night_face"><option value="-1">bez zmiany</option><option value="0">Wariant-1</option><option value="1">Wariant-2</option><option value="2">Wariant-3</option></select>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="grow"><div>Kolory w trybie jasnym</div><div class="sub">Preset włączany z trybem jasnym</div></div>
+      <select id="day_preset"></select>
+    </div>
+    <div class="row">
+      <div class="grow"><div>Kolory w trybie ciemnym</div><div class="sub">Preset włączany z trybem ciemnym</div></div>
+      <select id="night_preset"></select>
+    </div>
+  </section>
+  </div>
+
+  <!-- Budzik -->
+  <div class="tab" data-tab="alarm">
+  <section class="card">
+    <div class="row head"><h2 class="grow">Alarmy</h2><button class="primary small-btn" id="alarmAdd">+ Dodaj alarm</button></div>
+    <div id="alarmList"></div>
+    <hr>
+    <div class="row">
+      <div class="grow"><div>Drzemka</div><div class="sub">Po naciśnięciu „Drzemka” na Tab5</div></div>
+      <select id="alarmSnooze"><option value="5">5 min</option><option value="10" selected>10 min</option><option value="15">15 min</option><option value="20">20 min</option><option value="30">30 min</option></select>
+    </div>
+    <div class="row">
+      <div class="grow"><div>Drzemka minutnika</div><div class="sub">Osobno dla minutnika (przytrzymanie zegara)</div></div>
+      <select id="timerSnooze"><option value="1" selected>1 min</option><option value="2">2 min</option><option value="3">3 min</option><option value="5">5 min</option><option value="10">10 min</option></select>
+    </div>
+  </section>
+  </div>
+
+  <!-- Harmonogram -->
+  <div class="tab" data-tab="plan">
+  <section class="card">
+    <h2>Harmonogram</h2>
+    <div class="row">
+      <div class="grow"><div>Tryb nocny</div><div class="sub">Automatycznie ciemny</div></div>
+      <div class="times"><input type="time" id="night_start"> – <input type="time" id="night_end"></div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="grow"><div>Wygaszanie ekranu</div><div class="sub">Dotknięcie budzi na minutę</div></div>
+      <label class="switch"><input type="checkbox" id="off_enabled"><span></span></label>
+    </div>
+    <div class="row" id="offTimes">
+      <div class="grow sub">W godzinach</div>
+      <div class="times"><input type="time" id="off_start"> – <input type="time" id="off_end"></div>
+    </div>
+  </section>
+  </div>
+
+  <!-- System: place, language, memory, files, backup, restart -->
+  <div class="tab cols" data-tab="sys">
+  <section class="card">
+    <h2>Urządzenie</h2>
+    <div class="sub fieldlabel">Miejscowość dla pogody</div>
+    <div class="row">
+      <input type="text" id="postcode" class="grow" maxlength="40" autocomplete="off" placeholder="np. Warszawa albo 00-950">
+      <button class="primary" id="savePostcode">Szukaj</button>
+    </div>
+    <div class="sub" id="pcMsg"></div>
+    <div class="places" id="places"></div>
+    <hr>
+    <div class="row">
+      <div class="grow"><div>Język urządzenia</div><div class="sub">Menu, daty i przyciski na Tab5 (restart)</div></div>
+      <select id="devLang"><option value="pl">Polski</option><option value="en">English</option></select>
+    </div>
+    <div class="row">
+      <div class="grow"><div>Restart urządzenia</div><div class="sub">Tab5 uruchomi się ponownie (ok. 10 s)</div></div>
+      <button class="danger" id="restart">Restart</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Stan techniczny</h2>
+    <div class="facts">
+      <div><span>Program</span><b id="tProg">—</b></div>
+      <div><span>Slot programu</span><b id="tSlot">—</b></div>
+      <div><span>Wolna pamięć wewnętrzna</span><b id="tFree">—</b></div>
+      <div><span>Najmniej od startu</span><b id="tMin">—</b></div>
+      <div><span>Największy wolny blok</span><b id="tBlock">—</b></div>
+      <div><span>Wolna pamięć PSRAM</span><b id="tPsram">—</b></div>
+      <div><span>Ostatni crash</span><b id="tCrash">—</b></div>
+      <div><span>Zawieszenia ekranu</span><b id="tFreeze">—</b></div>
+    </div>
+    <details class="boot"><summary>Pamięć po krokach startu</summary><table id="tBoot"></table></details>
+    <details class="boot" id="tTasksBox" hidden><summary>Pamięć wewnętrzna według zadań</summary><table id="tTasks"></table></details>
+  </section>
+
+  <section class="card">
+    <h2>Kopia programu</h2>
+    <p class="sub" style="margin:-4px 0 12px">Pobierz program, który jest teraz na Tab5 — żeby zawsze móc do niego wrócić. Bez zapisanych ustawień i haseł Wi-Fi.</p>
+    <div class="backup">
+      <a href="/api/backup?kind=app" download><b>Program</b><span>app.bin · sam program (kopia)</span></a>
+      <a href="/api/backup?kind=full" download><b>Pełny instalator</b><span>web-install.bin · ESP Web Tool pod 0x0</span></a>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Karta SD</h2>
+    <div class="row">
+      <div class="grow"><div id="sdName">—</div><div class="sub" id="sdInfo"></div></div>
+      <button class="danger" id="sdFormat">Formatuj</button>
+    </div>
+    <div id="fm">
+      <div class="row fm-bar">
+        <div class="crumbs grow" id="crumbs"></div>
+        <button class="icon-btn" id="mkdirBtn" title="Nowy folder" aria-label="Nowy folder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.7-.9l-.8-1.2A2 2 0 0 0 7.9 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2z"/><path d="M12 10v6M9 13h6"/></svg></button>
+        <label class="button" for="upInput"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg>Wgraj</label>
+        <input type="file" id="upInput" multiple hidden>
+      </div>
+      <div class="progress" id="upProg"><i></i></div>
+      <div class="files" id="files"></div>
+    </div>
+  </section>
+  </div>
+
+  <footer>Design by Jakub W. · best year old <b>1976</b></footer>
+</main>
+<div id="toast"></div>
+<div class="lock" id="lock">
+  <div class="lock-box">
+    <svg viewBox="31 34 214 235" aria-hidden="true"><path fill="#FFC83D" fill-rule="evenodd" d="M244.879,93.11L244.896,93.11L244.896,209.662L244.688,209.662L244.882,209.768L138.147,268.448L31.411,209.768L31.605,209.662L31.463,209.662L31.463,93.141L31.411,93.112L138.147,34.432L244.879,93.11ZM61.145,195.764L61.145,109.459L138.147,151.792L215.214,109.423L215.214,195.598L173.919,218.353L173.919,173.791L138.147,193.458L102.44,173.827L102.44,218.485L61.145,195.764Z"/></svg>
+    <h1>MARCIASMEDIA</h1>
+    <p>Podaj PIN, aby sterować Tab5</p>
+    <div class="pin" id="pinBox"><i></i><i></i><i></i><i></i>
+      <input id="pinInput" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="current-password" aria-label="PIN"></div>
+    <div class="lock-msg" id="lockMsg"></div>
+  </div>
+</div>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <div class="dialog">
+    <div class="icon" id="mIcon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg></div>
+    <h3 id="mTitle"></h3>
+    <p id="mText"></p>
+    <select id="mSelect" hidden style="width:100%;margin:-8px 0 12px"></select>
+    <input id="mInput" type="text" maxlength="100" autocomplete="off" hidden>
+    <div class="actions"><button id="mCancel">Anuluj</button><button id="mOk"></button></div>
+  </div>
+</div>
+
+<script>
+// ------------------------------- PL / EN -----------------------------------
+// The page is written in Polish; in English every text that appears on the page (also later, from the script)
+// is swapped using this list. Default: the language the Tab5 program was built in; the choice is remembered.
+const EN = {
+  "Anuluj": "Cancel", "Automatycznie ciemny": "Dark automatically", "Ciemny": "Dark", "Ciśnienie": "Pressure",
+  "Dotknięcie budzi na minutę": "A touch wakes it for a minute", "Działa od": "Running for", "Stan techniczny": "Technical state", "Program": "Program", "Slot programu": "Program slot", "Wolna pamięć wewnętrzna": "Free internal RAM", "Najmniej od startu": "Lowest since start", "Największy wolny blok": "Largest free block", "Wolna pamięć PSRAM": "Free PSRAM", "Ostatni crash": "Last crash", "Zawieszenia ekranu": "Screen freezes", "brak": "none", "Pamięć po krokach startu": "Memory after each start step", "Pamięć wewnętrzna według zadań": "Internal RAM by task", "Wersja programu": "Program version", "Ekran": "Screen", "Formatuj": "Format",
+  "Gdy nikt nie dotyka ekranu": "When nobody touches the screen", "Harmonogram": "Schedule", "Jasność": "Brightness", "Jasny": "Light",
+  "Karta SD": "SD card", "np. Warszawa albo 00-950": "e.g. Berlin or 00-950", "Szukaj": "Search", "Język urządzenia": "Device language", "Menu, daty i przyciski na Tab5 (restart)": "Menu, dates and buttons on the Tab5 (restart)",
+  "Tab5 uruchomi się ponownie w nowym języku, potrwa to około 10 sekund.": "The Tab5 will restart in the new language, this takes about 10 seconds.", "Zmień język": "Change language", "Jak cyfry": "Like digits", "Karta": "Card", "Formatowanie…": "Formatting…", "Budzik": "Alarm clock", "+ Dodaj alarm": "+ Add alarm", "Budzik dzwoni": "Alarm is ringing", "Drzemka": "Snooze",
+  "Po naciśnięciu „Drzemka” na Tab5": "After pressing “Snooze” on the Tab5", "Drzemka minutnika": "Timer snooze",
+  "Osobno dla minutnika (przytrzymanie zegara)": "Separate for the timer (hold the clock)",
+  "Zapisano alarmy": "Alarms saved", "Brak alarmów — dodaj pierwszy przyciskiem powyżej.": "No alarms — add the first one with the button above.",
+  "Nazwa (np. Praca)": "Name (e.g. Work)", "Usuń alarm": "Delete alarm", "Pn": "Mo", "Wt": "Tu", "Śr": "We", "Cz": "Th", "Pt": "Fr", "So": "Sa", "Nd": "Su",
+  "Raz": "Once", "Głośność": "Volume", "Odsłuchaj": "Listen", "Usunąć alarm?": "Delete the alarm?",
+  "Odtwarzam przez 8 sekund": "Playing for 8 seconds", "Budzik wyłączony": "Alarm stopped", "Kopia programu": "Program backup", "Program": "Program", "Pełny instalator": "Full installer",
+  "Pobierz program, który jest teraz na Tab5 — żeby zawsze móc do niego wrócić. Bez zapisanych ustawień i haseł Wi-Fi.": "Download the program that is on the Tab5 now — to always be able to go back to it. Without saved settings or Wi-Fi passwords.",
+  "app.bin · sam program (kopia)": "app.bin · the program only (a copy)", "web-install.bin · ESP Web Tool pod 0x0": "web-install.bin · ESP Web Tool at 0x0",
+  "Wpisz co najmniej 2 znaki": "Type at least 2 characters", "Nic nie znaleziono — sprawdź nazwę": "Nothing found — check the name", "Wybierz miejscowość:": "Choose the place:", "Kolor cyfr": "Digit color",
+  "Kolor wartości sensorów": "Sensor value color", "Kolory w trybie ciemnym": "Colors in dark mode", "Kolory w trybie jasnym": "Colors in light mode",
+  "Miejscowość": "Place", "Nowy folder": "New folder", "Odśwież": "Refresh", "Ostatni start": "Last start", "Panel Tab5": "Tab5 panel",
+  "Podaj PIN, aby sterować Tab5": "Enter the PIN to control the Tab5", "Podgląd": "Preview", "Podgląd ekranu Tab5": "Tab5 screen preview",
+  "Pogoda": "Weather", "Pokaż intro": "Show intro", "Preset włączany z trybem ciemnym": "Preset applied with dark mode",
+  "Preset włączany z trybem jasnym": "Preset applied with light mode", "Presety kolorów": "Color presets", "Restart urządzenia": "Restart the device",
+  "Tab5 uruchomi się ponownie (ok. 10 s)": "The Tab5 restarts (about 10 s)", "Temperatura": "Temperature",
+  "Teraz": "Now", "Plan": "Plan", "Zatrzymaj": "Stop", "dzień": "day", "noc": "night", "Miejscowość dla pogody": "Place for the weather", "Wylogowanie": "Log out", "Na tym telefonie trzeba będzie znowu podać PIN": "You will have to enter the PIN again on this phone", "Pulpit": "Home", "Wygląd": "Look", "System": "System", "Kolory": "Colors", "Warianty": "Themes", "Alarmy": "Alarms", "Urządzenie": "Device", "W godzinach trybu nocnego; rano wraca wariant startowy": "In the night-mode hours; in the morning the start theme comes back", "Tryb nocny": "Night mode", "Ustawienia": "Settings", "W godzinach": "During", "W trybie jasnym": "In light mode",
+  "Wgraj": "Upload", "Wilgotność": "Humidity", "Wygaszanie ekranu": "Screen off schedule", "Wyloguj": "Log out", "Wyłącz": "Off", "Włącz": "On",
+  "Zapisz": "Save", "Zapisz obecne kolory": "Save current colors", "Zegar": "Clock", "Wariant po starcie": "Theme at start", "Zmiana wariantu": "Theme rotation",
+  "co 1 min": "every 1 min", "co 2 min": "every 2 min", "co 5 min": "every 5 min", "co 10 min": "every 10 min", "co 15 min": "every 15 min",
+  "co 30 min": "every 30 min", "co godzinę": "every hour", "wyłączona": "off", "łączenie…": "connecting…",
+  "Wariant-1": "Theme-1", "Wariant-2": "Theme-2", "Wariant-3": "Theme-3", "Wariant w nocy": "Theme at night", "Pokazywany w godzinach trybu nocnego; rano wraca wariant startowy": "Shown in the night-mode hours; in the morning the start theme comes back", "bez zmiany": "no change",
+  "Biały": "White", "Pomarańczowy": "Orange", "Różowy": "Pink", "Żółty": "Yellow", "Własny kolor": "Custom color", "Kolor wartości": "Value color",
+  "Brak karty SD": "No SD card", "Brak karty albo karta nieczytelna": "No card or the card can't be read", "Brak połączenia z Tab5": "No connection to the Tab5",
+  "Błąd połączenia, spróbuj ponownie": "Connection error, try again", "Dane zostaną usunięte, czy na pewno sformatować?": "All data will be erased. Format the card?",
+  "Ekran wyłączony": "Screen off", "Ekran włączony": "Screen on", "Formatowanie karty": "Formatting the card", "Formatowanie nie udało się": "Formatting failed",
+  "Intro na ekranie": "Intro on screen", "Karta sformatowana": "Card formatted",
+  "Kod musi mieć 5 cyfr, np. 00-950": "The postcode has 5 digits, e.g. 00-950", "Maksymalnie 8 presetów — wybierz preset do nadpisania": "At most 8 presets — choose one to overwrite",
+  "Na tym urządzeniu trzeba będzie znowu podać PIN.": "You will have to enter the PIN again on this device.", "Nie udało się": "Failed",
+  "Nie udało się rozpocząć formatowania": "Could not start formatting", "Nie udało się sformatować karty": "Could not format the card", "Nie udało się usunąć": "Could not delete",
+  "Nie udało się utworzyć folderu": "Could not create the folder", "Nie udało się — sprawdź połączenie": "Failed — check the connection",
+  "Nie znaleziono takiego kodu": "Postcode not found", "Nowa nazwa presetu": "New preset name", "Nowy preset": "New preset", "Odświeżono": "Refreshed",
+  "Podaj nazwę": "Enter a name", "Podaj nazwę folderu": "Enter the folder name", "Restart… strona odświeży się sama": "Restarting… the page will reload by itself",
+  "Szukam miejscowości…": "Looking up the place…", "Tab5 uruchomi się ponownie, potrwa to około 10 sekund.": "The Tab5 will restart, this takes about 10 seconds.",
+  "To może potrwać około minuty": "This can take about a minute", "Tryb ciemny": "Dark mode", "Tryb jasny": "Light mode", "Usunięto": "Deleted",
+  "Usunięto preset": "Preset deleted", "Usuwanie presetu": "Delete preset", "Usuń": "Delete", "Utworzono folder": "Folder created", "Utwórz": "Create",
+  "Wgrano plik": "File uploaded", "Wygaszanie wyłączone": "Screen off schedule disabled", "Wygaszanie włączone": "Screen off schedule enabled",
+  "Włóż kartę albo ją sformatuj": "Insert a card or format it", "Za dużo prób — poczekaj 30 sekund": "Too many attempts — wait 30 seconds",
+  "Zapisano godziny": "Hours saved", "Zapisano preset": "Preset saved", "Zapisz jako nowy albo nadpisz istniejący": "Save as new or overwrite an existing one",
+  "Zapisz kolory": "Save colors", "Zmieniono nazwę": "Renamed", "Zmień nazwę": "Rename", "Zły PIN": "Wrong PIN", "brak połączenia": "no connection",
+  "Na pewno usunąć?": "Delete it?", "Formatowanie…": "Formatting…", "Restart": "Restart",
+  "włączenie zasilania": "power on", "restart programowy": "software restart", "błąd programu (panic)": "program error (panic)",
+  "zawieszenie (watchdog)": "hang (watchdog)", "zawieszenie (watchdog zadań)": "hang (task watchdog)", "zawieszenie (watchdog przerwań)": "hang (interrupt watchdog)", "spadek napięcia zasilania": "power dip (brownout)", "wybudzenie": "wake-up", "przycisk reset": "reset button",
+  "reset przez USB": "USB reset", "reset przez kabel (wgrywanie)": "cable reset (flashing)", "inny": "other",
+};
+const EN_RE = [
+  [/^(.*) \(po (.*)\)$/, "$1 (after $2)"], [/^(.*) · blok (.*)$/, "$1 · block $2"],
+  [/^Karta (.+)$/, "Card $1"],
+  [/^Wolne ([\d,]+) GB z ([\d,]+) GB$/, (m, a, b) => `${a.replace(",", ".")} GB free of ${b.replace(",", ".")} GB`],
+  [/^Alarm (\d\d:\d\d)(.*) zostanie usunięty\.$/, (m, t, n) => `Alarm ${t}${n.replace("„", "“").replace("”", "”")} will be deleted.`],
+  [/^Folder „(.+)” razem z zawartością zostanie usunięty\.$/, "Folder “$1” and everything in it will be deleted."],
+  [/^Plik „(.+)” zostanie usunięty\.$/, "File “$1” will be deleted."],
+  [/^Preset „(.+)” zostanie usunięty\. Na pewno usunąć\?$/, "Preset “$1” will be deleted. Delete it?"],
+  [/^Nadpisano preset (.*)$/, "Preset $1 overwritten"], [/^Zapisano preset (.*)$/, "Preset $1 saved"],
+  [/^Pogoda będzie dla: (.*)$/, "Weather for: $1"], [/^Nie udało się wgrać: (.*)$/, "Upload failed: $1"],
+  [/^Jasność (\d+%)$/, "Brightness $1"], [/^Jasność (Min|Max)$/, "Brightness $1"], [/^Preset (\d+)$/, "Preset $1"],
+  [/^(.*) · (świetny|dobry|słaby|bardzo słaby)$/, (m, a, q) => `${a} · ${{"świetny": "excellent", "dobry": "good", "słaby": "weak", "bardzo słaby": "very weak"}[q]}`],
+];
+let lang = "pl";
+try { lang = localStorage.lang || ""; } catch (e) {}
+const langChosen = !!lang;
+lang = lang || "pl";
+function tr(text) {
+  const k = text.trim();
+  if (!k || lang !== "en") return text;
+  if (EN[k]) return text.replace(k, EN[k]);
+  for (const [re, r] of EN_RE) if (re.test(k)) return text.replace(k, k.replace(re, r));
+  return text;
+}
+const ATTRS = ["placeholder", "title", "aria-label", "alt"];
+function trNode(n) {
+  if (n.nodeType === 3) {
+    if (n.parentNode && /^(SCRIPT|STYLE)$/.test(n.parentNode.nodeName)) return;
+    if (n.__pl === undefined || (n.data !== n.__en)) n.__pl = n.data;  // text changed by the page: new original
+    const t = lang === "en" ? tr(n.__pl) : n.__pl;
+    n.__en = t;
+    if (n.data !== t) n.data = t;
+  } else if (n.nodeType === 1) {
+    for (const a of ATTRS) if (n.hasAttribute(a)) {
+      const key = "__pl_" + a, cur = n.getAttribute(a);
+      if (n[key] === undefined || cur !== n[key + "en"]) n[key] = cur;
+      const t = lang === "en" ? tr(n[key]) : n[key];
+      n[key + "en"] = t;
+      if (cur !== t) n.setAttribute(a, t);
+    }
+    for (const c of n.childNodes) trNode(c);
+  }
+}
+new MutationObserver(ms => { for (const m of ms) {
+  if (m.type === "characterData") trNode(m.target);
+  else if (m.type === "attributes") trNode(m.target);
+  else m.addedNodes.forEach(trNode);
+} }).observe(document.documentElement, {subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ATTRS});
+function setLang(l, remember) {
+  lang = l;
+  document.documentElement.lang = l;
+  if (remember) try { localStorage.lang = l; } catch (e) {}
+  document.querySelectorAll("#langsw button").forEach(b => b.classList.toggle("on", b.dataset.lang === l));
+  trNode(document.body);
+  try { if (cardReady) openDir(cwd); } catch (e) {}  // file dates in the chosen language
+}
+document.querySelectorAll("#langsw button").forEach(b => b.onclick = () => setLang(b.dataset.lang, true));
+setLang(lang, false);
+
+const FACES = ["Wariant-1", "Wariant-2", "Wariant-3"];  // Wariant-3 only when the Studio design has one (state.faces)
+const RESET = {power: "włączenie zasilania", software: "restart programowy", panic: "błąd programu (panic)", watchdog: "zawieszenie (watchdog)", "watchdog (tasks)": "zawieszenie (watchdog zadań)", "watchdog (interrupts)": "zawieszenie (watchdog przerwań)",
+  brownout: "spadek napięcia zasilania", wakeup: "wybudzenie", button: "przycisk reset", usb: "reset przez USB", flash: "reset przez kabel (wgrywanie)", other: "inny"};
+const $ = id => document.getElementById(id);
+let state = null, editing = 0, locked = false;
+
+// ----------------------------------- PIN -----------------------------------
+// The PIN is kept in a cookie, so every request (also downloads and images) carries it
+const setPin = pin => { document.cookie = `pin=${pin}; max-age=31536000; path=/; SameSite=Strict`; };
+function showLock(msg, info) {
+  locked = true;
+  $("lock").classList.add("show");
+  $("lockMsg").textContent = msg || "";
+  $("lockMsg").style.color = info ? "var(--dim)" : "";
+  $("pinInput").value = "";
+  drawPin();
+  setTimeout(() => $("pinInput").focus(), 50);
+}
+function drawPin() {
+  const n = $("pinInput").value.length;
+  [...$("pinBox").querySelectorAll("i")].forEach((d, i) => { d.classList.toggle("on", i < n); d.classList.toggle("cur", i === n); });
+}
+$("pinInput").oninput = async e => {
+  const inp = e.target;
+  inp.value = inp.value.replace(/\D/g, "").slice(0, 4);
+  drawPin();
+  if (inp.value.length < 4) return;
+  const r = await fetch("/api/login", {method: "POST", headers: {"X-PIN": inp.value}}).catch(() => null);
+  if (r && r.ok) {
+    setPin(inp.value);
+    locked = false;
+    $("lock").classList.remove("show");
+    reloadAll();
+    return;
+  }
+  const box = $("pinBox");
+  box.classList.remove("bad"); void box.offsetWidth; box.classList.add("bad");
+  $("lockMsg").textContent = !r ? "Brak połączenia z Tab5" : r.status === 429 ? "Za dużo prób — poczekaj 30 sekund" : "Zły PIN";
+  setTimeout(() => { inp.value = ""; drawPin(); box.classList.remove("bad"); }, 600);
+};
+$("pinBox").onclick = () => $("pinInput").focus();
+$("logout").onclick = async () => {
+  if (!await ask("Wylogowanie", "Na tym urządzeniu trzeba będzie znowu podać PIN.", "Wyloguj", false)) return;
+  document.cookie = "pin=; max-age=0; path=/; SameSite=Strict";
+  $("preview").removeAttribute("src");
+  $("preview").classList.remove("ready");
+  showLock("Wylogowano", true);
+};
+
+// Digit color: presets plus a custom color picker
+const COLORS = [["Turkusowy", "#5BE7E1"], ["Biały", "#F2F3F5"], ["Żółty", "#FFC83D"], ["Pomarańczowy", "#FF8A3D"],
+                ["Czerwony", "#FF4B4B"], ["Różowy", "#FF6FB5"], ["Fioletowy", "#A98BFF"], ["Niebieski", "#4DA3FF"], ["Zielony", "#5BE38A"]];
+// Builds a row of color swatches; "auto" adds a "jak cyfry" chip (follow the digit color)
+function palette(el, key, what, auto) {
+  if (auto) {
+    const a = document.createElement("button");
+    a.className = "swatch auto";
+    a.dataset.color = "auto";
+    a.innerHTML = '<i></i>Jak cyfry';
+    a.onclick = () => send({[key]: "auto"}, what + ": jak cyfry");
+    el.appendChild(a);
+    el.appendChild(Object.assign(document.createElement("div"), {className: "pbreak"}));  // the colors go under it
+  }
+  for (const [name, hex] of COLORS) {
+    const b = document.createElement("button");
+    b.className = "swatch";
+    b.style.background = hex;
+    b.title = name;
+    b.dataset.color = hex;
+    b.onclick = () => send({[key]: hex}, what + ": " + name.toLowerCase());
+    el.appendChild(b);
+  }
+  const custom = document.createElement("label");
+  custom.className = "swatch custom";
+  custom.title = "Własny kolor";
+  custom.innerHTML = '<input type="color" aria-label="Własny kolor">';
+  el.appendChild(custom);
+  const pick = custom.querySelector("input");
+  pick.onchange = e => send({[key]: e.target.value.toUpperCase()}, what + " zmieniony");
+  // Marks the current color
+  return color => {
+    const known = [...el.querySelectorAll("[data-color]")].some(b => b.dataset.color === color);
+    el.querySelectorAll("[data-color]").forEach(b => b.classList.toggle("on", b.dataset.color === color));
+    custom.classList.toggle("on", !known);
+    if (color !== "auto" && document.activeElement !== pick) pick.value = color.toLowerCase();
+  };
+}
+const markDigits = palette($("palette"), "digit_color", "Kolor cyfr", false);
+const markValues = palette($("palette2"), "sensor_color", "Kolor wartości", true);
+
+// ------------------------------- Color presets -------------------------------
+const PENCIL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>';
+let presetsShown = "";
+const presetAdd = $("presetSave");
+function drawPresets(s) {
+  const list = s.presets || [];
+  const key = JSON.stringify([list, s.digit_color, s.sensor_color, s.day_preset, s.night_preset]);
+  if (key === presetsShown) return;  // no redraw every 3 s
+  presetsShown = key;
+  const box = $("presetList");
+  box.innerHTML = "";
+  list.forEach((p, i) => {
+    const chip = document.createElement("div");
+    chip.className = "pcard" + (p.digit_color === s.digit_color && p.sensor_color === s.sensor_color ? " on" : "");
+    chip.tabIndex = 0;
+    chip.title = "Włącz";
+    const val = p.sensor_color === "auto" ? p.digit_color : p.sensor_color;
+    const tags = (s.day_preset === i ? '<i class="ptag">dzień</i>' : "") + (s.night_preset === i ? '<i class="ptag">noc</i>' : "");
+    chip.innerHTML = `<div class="pprev"><span style="color:${p.digit_color}">12:34</span><small style="color:${val}">21°</small></div>
+      <div class="pname"><span>${esc(p.name)}</span>${tags}</div>
+      <div class="pacts"><button title="Zmień nazwę">${PENCIL}</button><button class="del" title="Usuń">${ICON.trash}</button></div>`;
+    const [edit, del] = chip.querySelectorAll(".pacts button");
+    chip.onclick = e => { if (!e.target.closest(".pacts")) send({preset_apply: i}, "Preset: " + p.name); };
+    chip.onkeydown = e => { if (e.key === "Enter" && e.target === chip) chip.click(); };
+    edit.onclick = async () => {
+      const name = await ask("Zmień nazwę", "Nowa nazwa presetu", "Zapisz", false, p.name);
+      if (name && name !== p.name) send({preset_rename: {index: i, name}}, "Zmieniono nazwę");
+    };
+    del.onclick = async () => {
+      if (await ask("Usuwanie presetu", `Preset „${p.name}” zostanie usunięty. Na pewno usunąć?`, "Usuń")) send({preset_delete: i}, "Usunięto preset");
+    };
+    box.appendChild(chip);
+  });
+  box.appendChild(presetAdd);  // the "save" tile closes the grid (kept by reference: clearing the grid takes it out)
+
+  // Schedule selects
+  for (const id of ["day_preset", "night_preset"]) {
+    const sel = $(id);
+    sel.innerHTML = "";
+    sel.add(new Option("bez zmiany", -1));
+    list.forEach((p, i) => sel.add(new Option(p.name, i)));
+    sel.value = s[id];
+  }
+}
+$("presetSave").onclick = async () => {
+  const list = state && state.presets ? state.presets.map(p => p.name) : [];
+  const r = await saveAs("Zapisz kolory", list, "Preset " + (list.length + 1));
+  if (!r) return;
+  if (r.index < 0) {
+    if (list.length >= 8) return toast("Maksymalnie 8 presetów — wybierz preset do nadpisania");
+    send({preset_save: r.name}, "Zapisano preset");
+  } else {
+    send({preset_overwrite: r.index}, "Nadpisano preset " + list[r.index]);
+  }
+};
+for (const id of ["day_preset", "night_preset"])
+  $(id).onchange = e => send({[id]: +e.target.value}, "Zapisano");
+
+const facesEl = $("faces");
+FACES.forEach((name, k) => {
+  const b = document.createElement("button");
+  b.textContent = name;
+  b.onclick = () => send({face: k}, "Zegar: " + name);
+  facesEl.appendChild(b);
+  $("default_face").add(new Option(name, k));
+});
+
+// Styled replacement for confirm(); resolves true when confirmed
+function ask(title, text, ok, danger = true, input = null) {
+  return new Promise(resolve => {
+    const inp = $("mInput");
+    $("mSelect").hidden = true;
+    inp.hidden = input === null;
+    inp.value = input || "";
+    const m = $("modal");
+    $("mTitle").textContent = title;
+    $("mText").textContent = text;
+    $("mOk").textContent = ok;
+    $("mOk").className = danger ? "solid-danger" : "primary";
+    $("mIcon").className = danger ? "icon" : "icon accent";
+    const close = v => { m.classList.remove("show"); document.removeEventListener("keydown", key); resolve(v); };
+    const key = e => { if (e.key === "Escape") close(false); };
+    $("mOk").onclick = () => close(input === null ? true : inp.value.trim() || false);
+    inp.onkeydown = e => { if (e.key === "Enter") $("mOk").click(); };
+    $("mCancel").onclick = () => close(false);
+    m.onclick = e => { if (e.target === m) close(false); };
+    document.addEventListener("keydown", key);
+    m.classList.add("show");
+    (input === null ? $("mCancel") : inp).focus();
+  });
+}
+
+// Save dialog: "Nowy preset" with a name, or overwrite one of `names`. Resolves {index: -1, name} / {index: i} / null
+function saveAs(title, names, defName) {
+  return new Promise(resolve => {
+    const m = $("modal"), sel = $("mSelect"), inp = $("mInput");
+    $("mTitle").textContent = title;
+    $("mText").textContent = names.length ? "Zapisz jako nowy albo nadpisz istniejący" : "Podaj nazwę";
+    sel.innerHTML = `<option value="-1">Nowy preset</option>` + names.map((n, i) => `<option value="${i}">Nadpisz: ${esc(n)}</option>`).join("");
+    sel.hidden = !names.length;
+    sel.value = "-1";
+    inp.hidden = false; inp.value = defName;
+    sel.onchange = () => { inp.hidden = sel.value !== "-1"; };
+    $("mOk").textContent = "Zapisz";
+    $("mOk").className = "primary";
+    $("mIcon").className = "icon accent";
+    const close = v => { m.classList.remove("show"); document.removeEventListener("keydown", key); resolve(v); };
+    const key = e => { if (e.key === "Escape") close(null); };
+    $("mOk").onclick = () => {
+      const i = +sel.value;
+      if (i >= 0) return close({index: i});
+      const n = inp.value.trim();
+      if (n) close({index: -1, name: n});
+    };
+    inp.onkeydown = e => { if (e.key === "Enter") $("mOk").click(); };
+    $("mCancel").onclick = () => close(null);
+    m.onclick = e => { if (e.target === m) close(null); };
+    document.addEventListener("keydown", key);
+    m.classList.add("show");
+    inp.focus();
+  });
+}
+
+function toast(text) {
+  const t = $("toast");
+  t.textContent = text;
+  t.classList.add("show");
+  clearTimeout(toast.timer);
+  toast.timer = setTimeout(() => t.classList.remove("show"), 1800);
+}
+
+async function post(path, body) {
+  const r = await fetch(path, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body || {})});
+  if (r.status === 401) showLock("Podaj PIN ponownie");
+  if (!r.ok) throw new Error(r.status);
+}
+
+async function send(body, msg) {
+  try { await post("/api/set", body); if (msg) toast(msg); refresh(); setTimeout(loadPreview, 400); }
+  catch (e) { toast("Nie udało się — sprawdź połączenie"); }
+}
+
+const fmt = (v, d) => v === undefined ? "—" : v.toFixed(d).replace(".", ",");
+function uptime(s) {
+  const d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60);
+  return d ? `${d} d ${h} h` : h ? `${h} h ${m} min` : `${m} min`;
+}
+function bars(rssi) {
+  if (!rssi) return "";
+  return rssi > -60 ? " · świetny" : rssi > -70 ? " · dobry" : rssi > -80 ? " · słaby" : " · bardzo słaby";
+}
+const PC = ["", "Szukam miejscowości…", "", "Nie znaleziono takiego kodu", "Błąd połączenia, spróbuj ponownie"];
+
+// "Stan techniczny": memory and crashes; internal RAM below 30 KB is red, below 60 KB amber
+function renderTech(s) {
+  const kb = b => Math.round(b / 1024) + " KB", h = s.heap || {};
+  const mark = (id, v, txt) => { $(id).textContent = txt; $(id).className = v === undefined ? "" : v < 30720 ? "bad" : v < 61440 ? "warn" : "good"; };
+  const bm = /^(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)/.exec(s.build || "");
+  $("tProg").textContent = (bm ? `${bm[3]}.${bm[2]}.${bm[1]} ${bm[4]}:${bm[5]}` : s.build || "—") + (s.build_note ? " · " + s.build_note : "");
+  $("tSlot").textContent = s.app ? s.app.running : "—";
+  mark("tFree", h.int_free, h.int_free === undefined ? "—" : kb(h.int_free));
+  mark("tMin", h.int_min, h.int_min === undefined ? "—" : kb(h.int_min));
+  $("tBlock").textContent = h.int_block === undefined ? "—" : kb(h.int_block);
+  $("tPsram").textContent = h.psram_free === undefined ? "—" : (h.psram_free / 1048576).toFixed(1).replace(".", ",") + " MB";
+  $("tCrash").textContent = s.last_crash ? `${s.last_crash.step} (po ${uptime(s.last_crash.uptime)})` : "brak";
+  $("tCrash").className = s.last_crash ? "bad" : "good";
+  $("tFreeze").textContent = s.last_freeze ? `${s.last_freeze.count} · ${s.last_freeze.task}` : "brak";
+  $("tFreeze").className = s.last_freeze ? "warn" : "good";
+  $("tBoot").innerHTML = (s.boot_heap || []).map(m => `<tr><td>${m.step}</td><td>${kb(m.free)} · blok ${kb(m.block)}</td></tr>`).join("");
+  $("tTasksBox").hidden = !s.heap_tasks;
+  if (s.heap_tasks) $("tTasks").innerHTML = s.heap_tasks.map(t => `<tr><td>${t.task}</td><td>${(t.int / 1024).toFixed(1)} KB · ${t.blocks} bl.</td></tr>`).join("");
+}
+
+function render(s) {
+  $("dot").classList.add("on");
+  renderTech(s);
+  $("conn").textContent = "online";
+  $("temp").innerHTML = s.temperature === undefined ? "—" : fmt(s.temperature, 1) + "<small>°C</small>";
+  $("hum").innerHTML = s.humidity === undefined ? "—" : Math.round(s.humidity) + "<small>%</small>";
+  $("pres").innerHTML = s.pressure === undefined ? "—" : Math.round(s.pressure) + "<small>hPa</small>";
+  $("place").textContent = s.postcode ? `${s.place} (${s.postcode})` : s.place;
+  $("wifi").textContent = s.ssid ? s.ssid + bars(s.rssi) : "—";
+  $("uptime").textContent = uptime(s.uptime);
+  $("reset").textContent = RESET[s.reset_reason] || s.reset_reason;
+  // Studio build ID "20261101-100136-b977" shown as its date and time, like on the Tab5 and in Studio
+  const bm = /^(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)/.exec(s.build || "");
+  $("build").textContent = bm ? `${bm[3]}.${bm[2]}.${bm[1]} ${bm[4]}:${bm[5]}` : s.build || "—";
+  $("build").title = s.build || "";
+  if (document.activeElement !== $("devLang")) $("devLang").value = s.lang || "pl";
+  if (!langChosen && s.lang && s.lang !== lang) setLang(s.lang, false);  // first visit: the program's language
+
+  [...facesEl.children].forEach((b, k) => { b.classList.toggle("on", k === s.face); b.hidden = k >= (s.faces || 2); });
+  [...$("default_face").options].forEach((o, k) => { o.hidden = k >= (s.faces || 2) && k !== s.default_face; });
+  if (document.activeElement !== $("night_face")) $("night_face").value = s.night_face ?? -1;
+  $("night_face").options[3].hidden = (s.faces || 2) < 3 && s.night_face !== 2;
+  document.querySelectorAll("[data-night]").forEach(b => b.classList.toggle("on", (b.dataset.night === "1") === s.night));
+  if (s.digit_color) {
+    markDigits(s.digit_color);
+    markValues(s.sensor_color || "auto");
+    $("palette2").querySelector(".auto i").style.background = s.digit_color;
+    drawPresets(s);
+  }
+  screenButtons(s);
+
+  if (!editing) {
+    for (const id of ["night_start", "night_end", "off_start", "off_end"]) if (document.activeElement !== $(id)) $(id).value = s[id];
+    $("off_enabled").checked = s.off_enabled;
+    document.querySelectorAll("[data-br]").forEach(b => b.classList.toggle("on", +b.dataset.br === s.brightness));
+    $("cycle_min").value = s.cycle_min;
+    $("default_face").value = s.default_face;
+  }
+  $("offTimes").classList.toggle("disabled", !s.off_enabled);
+  const sd = s.sd || {};
+  const gb = mb => (mb / 1024).toFixed(1).replace(".", ",") + " GB";
+  if (sd.formatting) {
+    $("sdName").textContent = "Formatowanie…";
+    $("sdInfo").textContent = "To może potrwać około minuty";
+  } else {
+    $("sdName").textContent = sd.mounted ? "Karta " + sd.name : "Brak karty albo karta nieczytelna";
+    $("sdInfo").textContent = sd.mounted ? `Wolne ${gb(sd.free_mb)} z ${gb(sd.total_mb)}` :
+      sd.format_result === 2 ? "Formatowanie nie udało się" : "Włóż kartę albo ją sformatuj";
+  }
+  $("sdFormat").disabled = !!sd.formatting;
+  if (render.wasFormatting && !sd.formatting) toast(sd.format_result === 1 ? "Karta sformatowana" : "Nie udało się sformatować karty");
+  render.wasFormatting = !!sd.formatting;
+  if (sd.formatting) setTimeout(refresh, 3000);  // follow the formatting until it ends
+  const ready = !!sd.mounted && !sd.formatting;
+  $("fm").classList.toggle("disabled", !ready);
+  if (ready !== cardReady) { cardReady = ready; openDir(ready ? cwd : "/"); }
+  if (s.postcode_state === 1) setTimeout(refresh, 2000);  // follow the postcode lookup
+  if (s.postcode_state === 2) $("pcMsg").textContent = "Pogoda będzie dla: " + s.place;
+  else if (PC[s.postcode_state]) $("pcMsg").textContent = PC[s.postcode_state];
+}
+
+async function refresh() {
+  try {
+    const r = await fetch("/api/state", {cache: "no-store"});
+    if (r.status === 401) { if (!locked) showLock(); return; }
+    state = await r.json();
+    render(state);
+  } catch (e) {
+    $("dot").classList.remove("on");
+    $("conn").textContent = "brak połączenia";
+  }
+}
+
+// Controls
+$("scrOn").onclick = () => send({screen: true}, "Ekran włączony");
+$("scrOff").onclick = () => send({screen: false}, "Ekran wyłączony");
+// Screen buttons: the active one is yellow. While the intro plays "Pokaż intro" is lit; the Tab5 reports the end ("intro")
+function screenButtons(s) {
+  const intro = !!s.intro;
+  $("intro").classList.toggle("primary", intro);
+  $("scrOn").classList.toggle("primary", !intro && s.screen);
+  $("scrOff").classList.toggle("primary", !intro && !s.screen);
+}
+let introPoll = null;
+$("intro").onclick = async () => {
+  try { await post("/api/intro"); } catch (e) { toast("Nie udało się"); return; }
+  screenButtons({intro: true});
+  clearInterval(introPoll);
+  const t0 = Date.now();
+  introPoll = setInterval(async () => {
+    try {
+      const r = await fetch("/api/state", {cache: "no-store"});
+      const s = await r.json();
+      if (!s.intro || Date.now() - t0 > 30000) { clearInterval(introPoll); state = s; render(s); }
+    } catch (e) { clearInterval(introPoll); }
+  }, 700);
+};
+document.querySelectorAll("[data-night]").forEach(b =>
+  b.onclick = () => send({night: b.dataset.night === "1"}, b.dataset.night === "1" ? "Tryb ciemny" : "Tryb jasny"));
+
+// Brightness in light mode: just the two ends (the backlight scale is 10–100 %)
+document.querySelectorAll("[data-br]").forEach(b => b.onclick = () => {
+  document.querySelectorAll("[data-br]").forEach(x => x.classList.toggle("on", x === b));
+  send({brightness: +b.dataset.br}, "Jasność " + b.textContent);
+});
+
+for (const id of ["night_start", "night_end", "off_start", "off_end"])
+  $(id).onchange = () => $(id).value && send({[id]: $(id).value}, "Zapisano godziny");
+$("off_enabled").onchange = e => send({off_enabled: e.target.checked}, e.target.checked ? "Wygaszanie włączone" : "Wygaszanie wyłączone");
+$("cycle_min").onchange = e => send({cycle_min: +e.target.value}, "Zapisano");
+$("night_face").onchange = e => send({night_face: +e.target.value}, "Zapisano");
+$("default_face").onchange = e => send({default_face: +e.target.value}, "Zapisano");
+
+// Place search: a name anywhere in the world or a Polish postcode; the Tab5 asks the services and lists the places
+async function searchPlace() {
+  const q = $("postcode").value.trim(), box = $("places");
+  box.innerHTML = "";
+  if (q.length < 2) { $("pcMsg").textContent = "Wpisz co najmniej 2 znaki"; return; }
+  $("pcMsg").textContent = "Szukam miejscowości…";
+  try {
+    const r = await fetch("/api/places?q=" + encodeURIComponent(q));
+    if (r.status === 401) return showLock("Podaj PIN ponownie");
+    const d = await r.json();
+    if (d.status !== "ok") { $("pcMsg").textContent = d.status === "not_found" ? "Nic nie znaleziono — sprawdź nazwę" : "Błąd połączenia, spróbuj ponownie"; return; }
+    $("pcMsg").textContent = "Wybierz miejscowość:";
+    d.results.forEach(p => {
+      const b = document.createElement("button");
+      const sub = [p.postcode, [p.region, p.country].filter(Boolean).join(", ")].filter(Boolean).join(" · ");
+      b.innerHTML = `<b></b><span></span>`;
+      b.querySelector("b").textContent = p.name; b.querySelector("span").textContent = sub;
+      b.onclick = async () => {
+        box.innerHTML = ""; $("postcode").value = "";
+        await send({place: {name: p.name, lat: p.lat, lon: p.lon, postcode: p.postcode}});
+        $("pcMsg").textContent = "Pogoda będzie dla: " + p.name;
+      };
+      box.appendChild(b);
+    });
+  } catch (e) { $("pcMsg").textContent = "Błąd połączenia, spróbuj ponownie"; }
+}
+$("savePostcode").onclick = searchPlace;
+$("postcode").onkeydown = e => { if (e.key === "Enter") searchPlace(); };
+// ------------------------------ File manager ------------------------------
+const ICON = {
+  dir: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.7-.9l-.8-1.2A2 2 0 0 0 7.9 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2z"/></svg>',
+  file: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>',
+  image: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></svg>',
+  down: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12M7 11l5 5 5-5M4 20h16"/></svg>',
+  trash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>',
+};
+let cwd = "/", cardReady = false;
+const join = (dir, name) => (dir === "/" ? "/" : dir + "/") + name;
+const q = path => "?path=" + encodeURIComponent(path);
+const esc = t => t.replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+function size(b) {
+  if (b < 1024) return b + " B";
+  const u = ["KB", "MB", "GB"]; let i = -1;
+  do { b /= 1024; i++; } while (b >= 1024 && i < 2);
+  return b.toFixed(b < 10 ? 1 : 0).replace(".", ",") + " " + u[i];
+}
+const date = t => t > 1e9 ? new Date(t * 1000).toLocaleString(lang === "en" ? "en-GB" : "pl-PL", {day: "numeric", month: "short", hour: "2-digit", minute: "2-digit"}) : "";
+
+function crumbs() {
+  const parts = cwd.split("/").filter(Boolean);
+  let html = '<a data-p="/">Karta</a>', acc = "";
+  for (const p of parts) { acc += "/" + p; html += `<span>/</span><a data-p="${esc(acc)}">${esc(p)}</a>`; }
+  $("crumbs").innerHTML = html;
+  $("crumbs").querySelectorAll("a").forEach(a => a.onclick = () => openDir(a.dataset.p));
+}
+
+async function openDir(path) {
+  cwd = path;
+  crumbs();
+  const list = $("files");
+  if (!cardReady) { list.innerHTML = '<div class="empty">Włóż kartę SD, aby zobaczyć pliki</div>'; return; }
+  try {
+    const r = await fetch("/api/files" + q(cwd), {cache: "no-store"});
+    if (r.status === 401) return showLock();
+    if (!r.ok) throw new Error(await r.text());
+    const items = (await r.json()).items.sort((a, b) => (b.dir - a.dir) || a.name.localeCompare(b.name, "pl"));
+    if (!items.length) { list.innerHTML = '<div class="empty">Folder jest pusty — wgraj pliki przyciskiem „Wgraj”</div>'; return; }
+    list.innerHTML = "";
+    for (const it of items) {
+      const p = join(cwd, it.name), img = /\.(jpe?g|png|gif|bmp)$/i.test(it.name);
+      const row = document.createElement("div");
+      row.className = "file" + (it.dir ? " dir" : "");
+      row.innerHTML = `<div class="ico">${it.dir ? ICON.dir : img ? ICON.image : ICON.file}</div>
+        <div class="grow"><div class="name">${esc(it.name)}</div><div class="meta">${it.dir ? "folder" : size(it.size)}${date(it.mtime) ? " · " + date(it.mtime) : ""}</div></div>
+        <div class="act">${it.dir ? "" : `<a href="/api/file${q(p)}" download="${esc(it.name)}" title="Pobierz">${ICON.down}</a>`}
+        <button title="Usuń" data-del>${ICON.trash}</button></div>`;
+      if (it.dir) row.onclick = e => { if (!e.target.closest("[data-del]")) openDir(p); };
+      row.querySelector("[data-del]").onclick = async e => {
+        e.stopPropagation();
+        const what = it.dir ? `Folder „${it.name}” razem z zawartością zostanie usunięty.` : `Plik „${it.name}” zostanie usunięty.`;
+        if (!await ask("Usuwanie", what + " Na pewno usunąć?", "Usuń")) return;
+        try { await post("/api/delete" + q(p)); toast("Usunięto"); } catch (err) { toast("Nie udało się usunąć"); }
+        openDir(cwd);
+      };
+      list.appendChild(row);
+    }
+  } catch (e) {
+    list.innerHTML = '<div class="empty">Nie udało się odczytać folderu</div>';
+  }
+}
+
+$("mkdirBtn").onclick = async () => {
+  if (!cardReady) return toast("Brak karty SD");
+  const name = await ask("Nowy folder", "Podaj nazwę folderu", "Utwórz", false, "");
+  if (!name) return;
+  if (/[\\/:*?"<>|]/.test(name)) return toast("Nazwa zawiera niedozwolone znaki");
+  try { await post("/api/mkdir" + q(join(cwd, name))); toast("Utworzono folder"); } catch (e) { toast("Nie udało się utworzyć folderu"); }
+  openDir(cwd);
+};
+
+function upload(file) {
+  return new Promise((resolve, reject) => {
+    const x = new XMLHttpRequest();
+    x.open("POST", "/api/upload" + q(join(cwd, file.name)));
+    x.upload.onprogress = e => { if (e.lengthComputable) $("upProg").firstElementChild.style.width = (e.loaded / e.total * 100) + "%"; };
+    x.onload = () => x.status === 200 ? resolve() : reject();
+    x.onerror = reject;
+    x.send(file);
+  });
+}
+
+$("upInput").onchange = async e => {
+  const files = [...e.target.files];
+  e.target.value = "";
+  if (!files.length) return;
+  if (!cardReady) return toast("Brak karty SD");
+  const bar = $("upProg");
+  bar.classList.add("show");
+  let ok = 0;
+  for (const [i, f] of files.entries()) {
+    bar.firstElementChild.style.width = "0";
+    toast(`Wgrywanie ${files.length > 1 ? `${i + 1}/${files.length}: ` : ""}${f.name}`);
+    try { await upload(f); ok++; } catch (err) { toast("Nie udało się wgrać: " + f.name); }
+  }
+  bar.classList.remove("show");
+  if (ok) toast(ok === 1 ? "Wgrano plik" : `Wgrano ${ok} pliki`);
+  openDir(cwd);
+};
+
+$("sdFormat").onclick = async () => {
+  if (!await ask("Formatowanie karty", "Dane zostaną usunięte, czy na pewno sformatować?", "Formatuj")) return;
+  try { await post("/api/sd/format"); toast("Formatowanie…"); refresh(); }
+  catch (e) { toast("Nie udało się rozpocząć formatowania"); }
+};
+$("devLang").onchange = async e => {
+  const l = e.target.value;
+  if (!await ask("Język urządzenia", "Tab5 uruchomi się ponownie w nowym języku, potrwa to około 10 sekund.", "Zmień język", false)) { e.target.value = state && state.lang || "pl"; return; }
+  try { await post("/api/set", {lang: l}); toast("Restart… strona odświeży się sama"); setTimeout(() => location.reload(), 14000); } catch (err) {}
+};
+$("restart").onclick = async () => {
+  if (!await ask("Restart Tab5", "Tab5 uruchomi się ponownie, potrwa to około 10 sekund.", "Restartuj", false)) return;
+  try { await post("/api/restart"); toast("Restart… strona odświeży się sama"); } catch (e) {}
+};
+
+
+// Screen preview: loaded with the page, after every change and on "Odśwież" (no automatic polling)
+let previewBusy = false;
+function loadPreview() {
+  if (previewBusy || locked || document.visibilityState !== "visible") return;
+  previewBusy = true;
+  const img = new Image();
+  img.onload = () => { const p = $("preview"); p.src = img.src; p.classList.add("ready"); previewBusy = false; };
+  img.onerror = () => { previewBusy = false; };
+  img.src = "/api/preview?t=" + Date.now();
+}
+
+// --------------------------------- Alarms ---------------------------------
+// Up to 10 alarms: time, days (none = once), name, volume; the sound is the built-in beep.
+// Every change is saved on the Tab5 after a short pause.
+const DAYS = ["Pn", "Wt", "Śr", "Cz", "Pt", "So", "Nd"];
+let alarms = [], alarmTimer = null;
+async function loadAlarms() {
+  try {
+    const r = await fetch("/api/alarms", {cache: "no-store"});
+    if (!r.ok) return;
+    const d = await r.json();
+    alarms = d.alarms;
+    $("alarmSnooze").value = d.snooze;
+    $("timerSnooze").value = d.timer_snooze || 1;
+    $("alarmRing").classList.toggle("show", d.ringing);
+    drawAlarms();
+  } catch (e) {}
+}
+function saveAlarms(now) {
+  clearTimeout(alarmTimer);
+  alarmTimer = setTimeout(async () => {
+    try { await post("/api/alarms", {alarms, snooze: +$("alarmSnooze").value, timer_snooze: +$("timerSnooze").value}); toast("Zapisano alarmy"); }
+    catch (e) { toast("Nie udało się — sprawdź połączenie"); }
+  }, now ? 0 : 700);
+}
+const TRASH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/></svg>';
+// "Odsłuchaj" plays the beep for 8 s; meanwhile that button says "Zatrzymaj" (yellow) and stops it
+let listening = null;  // {i, timer}
+function testButtons() {
+  document.querySelectorAll("[data-test]").forEach(b => {
+    const on = !!listening && listening.i === +b.dataset.test;
+    b.textContent = on ? "Zatrzymaj" : "Odsłuchaj";
+    b.classList.toggle("primary", on);
+  });
+}
+function listenEnd() { if (listening) clearTimeout(listening.timer); listening = null; testButtons(); }
+async function listen(i, volume) {
+  if (listening && listening.i === i) {
+    listenEnd();
+    try { await post("/api/alarm/stop", {}); } catch (e) {}
+    return;
+  }
+  try { await post("/api/alarm/test", {volume}); } catch (e) { toast("Nie udało się"); return; }
+  if (listening) clearTimeout(listening.timer);
+  listening = {i, timer: setTimeout(listenEnd, 8000)};
+  testButtons();
+}
+
+function drawAlarms() {
+  const box = $("alarmList");
+  box.innerHTML = alarms.length ? "" : '<p class="sub" style="margin:8px 0 0">Brak alarmów — dodaj pierwszy przyciskiem powyżej.</p>';
+  $("alarmAdd").disabled = alarms.length >= 10;
+  alarms.forEach((a, i) => {
+    const el = document.createElement("div");
+    el.className = "alarm" + (a.enabled ? "" : " off");
+    const p2 = n => String(n).padStart(2, "0");
+    el.innerHTML = `<div class="top">
+        <input type="time" value="${p2(a.hour)}:${p2(a.minute)}">
+        <input type="text" maxlength="23" placeholder="Nazwa (np. Praca)">
+        <label class="switch"><input type="checkbox" ${a.enabled ? "checked" : ""}><span></span></label>
+        <button class="icon-del" title="Usuń alarm">${TRASH}</button></div>
+      <div class="days">${DAYS.map((d, k) => `<button data-k="${k}" class="${a.days & (1 << k) ? "on" : ""}">${d}</button>`).join("")}
+        <button class="once ${a.days ? "" : "on"}" data-once>Raz</button></div>
+      <div class="snd">
+        <div class="vol"><span>Głośność</span><input type="range" min="10" max="100" step="5" value="${a.volume}"><b>${a.volume}%</b></div>
+        <button data-test="${i}">Odsłuchaj</button></div>`;
+    const [time, name] = el.querySelectorAll(".top input");
+    name.value = a.label;
+    time.onchange = () => { const [h, m] = time.value.split(":"); a.hour = +h; a.minute = +m; saveAlarms(); };
+    name.oninput = () => { a.label = name.value; saveAlarms(); };
+    el.querySelector(".switch input").onchange = e => { a.enabled = e.target.checked; el.classList.toggle("off", !a.enabled); saveAlarms(true); };
+    el.querySelector(".icon-del").onclick = async () => {
+      if (!await ask("Usunąć alarm?", `Alarm ${p2(a.hour)}:${p2(a.minute)}${a.label ? " „" + a.label + "”" : ""} zostanie usunięty.`, "Usuń")) return;
+      alarms.splice(i, 1); drawAlarms(); saveAlarms(true);
+    };
+    el.querySelectorAll(".days [data-k]").forEach(b => b.onclick = () => { a.days ^= 1 << +b.dataset.k; drawAlarms(); saveAlarms(); });
+    el.querySelector("[data-once]").onclick = () => { a.days = 0; drawAlarms(); saveAlarms(); };
+    const vol = el.querySelector(".vol input");
+    vol.oninput = () => { a.volume = +vol.value; el.querySelector(".vol b").textContent = vol.value + "%"; };
+    vol.onchange = () => saveAlarms();
+    el.querySelector("[data-test]").onclick = () => listen(i, a.volume);
+    box.appendChild(el);
+  });
+  testButtons();
+}
+$("alarmAdd").onclick = () => {
+  if (alarms.length >= 10) return;
+  alarms.push({enabled: true, hour: 7, minute: 0, days: 31, volume: 80, label: ""});
+  drawAlarms(); saveAlarms(true);
+};
+$("alarmSnooze").onchange = () => saveAlarms(true);
+$("timerSnooze").onchange = () => saveAlarms(true);
+$("alarmSnoozeNow").onclick = async () => { try { await post("/api/alarm/snooze", {}); $("alarmRing").classList.remove("show"); toast("Drzemka"); } catch (e) {} };
+$("alarmStopNow").onclick = async () => { try { await post("/api/alarm/stop", {}); $("alarmRing").classList.remove("show"); toast("Budzik wyłączony"); } catch (e) {} };
+
+// Tabs: the chosen one is remembered (and kept in the address, #look etc.)
+function showTab(t) {
+  if (!document.querySelector(`.tab[data-tab="${t}"]`)) t = "home";
+  document.querySelectorAll(".tab").forEach(e => e.classList.toggle("on", e.dataset.tab === t));
+  document.querySelectorAll("#tabs button").forEach(b => b.classList.toggle("on", b.dataset.tab === t));
+  try { localStorage.tab = t; } catch (e) {}
+  if (location.hash !== "#" + t) history.replaceState(null, "", "#" + t);
+  if (t === "home") loadPreview();
+  scrollTo({top: 0});
+}
+document.querySelectorAll("#tabs button").forEach(b => b.onclick = () => showTab(b.dataset.tab));
+addEventListener("hashchange", () => showTab(location.hash.slice(1)));
+{ let t = location.hash.slice(1); if (!t) try { t = localStorage.tab || ""; } catch (e) {} showTab(t || "home"); }
+
+// A thin line under the pinned header once the page scrolls
+addEventListener("scroll", () => document.querySelector("header").classList.toggle("stuck", scrollY > 8), {passive: true});
+
+function reloadAll() {
+  refresh();
+  loadAlarms();
+  loadPreview();
+  if (cardReady) openDir(cwd);
+}
+$("reload").onclick = async () => {
+  const b = $("reload");
+  b.disabled = true;
+  reloadAll();
+  setTimeout(() => { b.disabled = false; toast("Odświeżono"); }, 600);
+};
+// Back to the page after a while (other tab, phone unlocked): refresh once
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") reloadAll(); });
+
+reloadAll();
+</script>
+</body>
+</html>

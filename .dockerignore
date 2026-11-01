@@ -1,0 +1,11 @@
+# Never bake local secrets, data or build output into the image
+.env
+.git
+data/
+firmware/build/
+firmware/managed_components/
+firmware/main/studio/
+firmware/main/wifi_secrets.h
+firmware/main/web_secrets.h
+**/__pycache__
+**/.DS_Store
